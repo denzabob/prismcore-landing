@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Призма — Лендинг MVP
 
-## Getting Started
+Одностраничный лендинг для сметного приложения «Призма» с формой заявки на тестовый период.
 
-First, run the development server:
+## Техстек
+
+- **Next.js 15** + TypeScript + App Router
+- **Tailwind CSS v4** + shadcn/ui
+- **Prisma** + SQLite
+- **zod** — валидация форм (клиент + сервер)
+- **next-themes** — поддержка тёмной темы
+- **lucide-react** — иконки
+
+## Быстрый старт
 
 ```bash
+# 1. Установить зависимости
+npm install
+
+# 2. Скопировать и настроить .env
+cp .env.example .env
+# Отредактируйте ADMIN_TOKEN в .env
+
+# 3. Применить миграции (создаст SQLite БД)
+npx prisma migrate dev
+
+# 4. Запустить dev-сервер
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Приложение будет доступно по адресу [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Структура
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── page.tsx              # Главная (лендинг)
+│   ├── layout.tsx            # Root layout + SEO мета
+│   ├── globals.css           # Tailwind + shadcn variables
+│   ├── admin/page.tsx        # Админка (просмотр лидов)
+│   └── api/
+│       ├── lead/route.ts     # POST /api/lead — приём заявок
+│       └── admin/
+│           ├── leads/route.ts  # GET/PATCH — список лидов
+│           └── export/route.ts # GET — экспорт CSV
+├── components/
+│   ├── ui/                   # shadcn/ui компоненты
+│   ├── header.tsx            # Навигация + тема
+│   ├── hero.tsx              # Hero-секция
+│   ├── audience.tsx          # Кому подходит
+│   ├── features.tsx          # Что внутри
+│   ├── how-it-works.tsx      # Как это работает
+│   ├── trust.tsx             # Доверие
+│   ├── lead-form.tsx         # Форма заявки
+│   └── footer.tsx            # Подвал
+├── lib/
+│   ├── prisma.ts             # Singleton Prisma Client
+│   ├── validators.ts         # Zod-схемы
+│   ├── rate-limit.ts         # In-memory rate limiter
+│   └── utils.ts              # cn() утилита
+prisma/
+├── schema.prisma             # Модель Lead
+└── migrations/               # Миграция SQLite
+```
 
-## Learn More
+## Переменные окружения
 
-To learn more about Next.js, take a look at the following resources:
+| Переменная     | Описание                           | По умолчанию         |
+|---------------|------------------------------------|--------------------|
+| `DATABASE_URL` | Путь к SQLite файлу                | `file:./dev.db`     |
+| `ADMIN_TOKEN`  | Токен доступа к /admin              | `prisma-admin-2026` |
+| `SITE_URL`     | URL сайта (для OG-тегов, опционально) | `http://localhost:3000` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Endpoints
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### `POST /api/lead`
+Приём заявок с лендинга.
 
-## Deploy on Vercel
+**Body (JSON):**
+```json
+{
+  "name": "Иван Иванов",
+  "activity": "Эксперт",
+  "email": "ivan@example.com",
+  "phone": "+7 999 123-45-67",
+  "comment": "Хочу автоматизировать сметы",
+  "consent": true
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Защита:** honeypot-поле `website`, rate-limit 5 запросов/час на IP.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### `GET /api/admin/leads?token=ADMIN_TOKEN`
+Список лидов с пагинацией и поиском.
+
+**Параметры:** `token`, `search`, `page`
+
+### `PATCH /api/admin/leads?token=ADMIN_TOKEN`
+Обновление статуса лида.
+
+**Body:** `{ "id": 1, "status": "contacted" }`
+
+### `GET /api/admin/export?token=ADMIN_TOKEN`
+Скачать все лиды в CSV.
+
+## Админка
+
+Открыть: [http://localhost:3000/admin](http://localhost:3000/admin)
+
+Способы авторизации:
+1. Ввести токен в форме на странице /admin
+2. Перейти по URL: `/admin?token=YOUR_TOKEN`
+
+Возможности:
+- Просмотр заявок с сортировкой по дате
+- Поиск по имени, email, телефону
+- Отметка «Связались» (new → contacted)
+- Экспорт CSV
+
+## Где менять тексты
+
+Все тексты находятся непосредственно в компонентах:
+- Hero: `src/components/hero.tsx`
+- Аудитория: `src/components/audience.tsx`
+- Возможности: `src/components/features.tsx`
+- Шаги: `src/components/how-it-works.tsx`
+- Доверие: `src/components/trust.tsx`
+- Футер: `src/components/footer.tsx`
+
+## Лицензия
+
+Проприетарный проект. Все права защищены.

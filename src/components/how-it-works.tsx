@@ -1,0 +1,69 @@
+"use client";
+
+import { Upload, Settings, FileOutput } from "lucide-react";
+
+const steps = [
+  {
+    number: "01",
+    icon: Upload,
+    title: "Загрузите данные",
+    description:
+      "Опишите объект, укажите перечень повреждений или работ. Система поможет структурировать информацию.",
+  },
+  {
+    number: "02",
+    icon: Settings,
+    title: "Настройте параметры",
+    description:
+      "Выберите регион, коэффициенты, поставщиков. Призма автоматически подберёт актуальные цены и нормативы.",
+  },
+  {
+    number: "03",
+    icon: FileOutput,
+    title: "Получите результат",
+    description:
+      "Сформируйте PDF-отчёт с детализацией, QR-кодом верификации и структурированной сметой.",
+  },
+];
+
+export function HowItWorks() {
+  return (
+    <section id="how-it-works" className="py-24 sm:py-32">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+            Как это работает
+          </h2>
+          <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
+            Три простых шага от исходных данных до готовой сметы.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+          {steps.map((step, i) => (
+            <div key={step.number} className="relative text-center group">
+              {/* Connector line (hidden on mobile) */}
+              {i < steps.length - 1 && (
+                <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-[1px] bg-border" />
+              )}
+
+              <div className="relative inline-flex mb-6">
+                <div className="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-5 group-hover:from-primary/20 group-hover:to-primary/10 transition-colors">
+                  <step.icon className="h-8 w-8 text-primary" />
+                </div>
+                <span className="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
+                  {step.number}
+                </span>
+              </div>
+
+              <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
+                {step.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
