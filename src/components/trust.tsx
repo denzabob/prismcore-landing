@@ -7,10 +7,11 @@ export function Trust() {
     <section className="py-24 sm:py-32 bg-muted/30">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center">
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-          Тестовый доступ к рабочей версии
+          Демо-доступ по заявке
         </h2>
         <p className="mx-auto max-w-2xl text-muted-foreground text-lg mb-12">
-          Оставьте заявку — предоставим доступ и поможем запустить первый расчёт.
+          Оставьте заявку — мы свяжемся с вами и предоставим
+          тестовый&nbsp;доступ. Без автоматических списаний и навязчивых рассылок.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">

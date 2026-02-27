@@ -15,8 +15,8 @@ export function Footer() {
             <a href="#audience" className="hover:text-foreground transition-colors">
               Кому подходит
             </a>
-            <a href="#evidence" className="hover:text-foreground transition-colors">
-              Доказательная база
+            <a href="#features" className="hover:text-foreground transition-colors">
+              Возможности
             </a>
             <a href="#cta" className="hover:text-foreground transition-colors">
               Заявка
