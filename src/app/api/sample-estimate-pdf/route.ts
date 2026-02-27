@@ -1,4 +1,4 @@
-function buildSamplePdf(): Uint8Array {
+function buildSamplePdf(): string {
   const contentStream = [
     "BT",
     "/F1 26 Tf",
@@ -40,13 +40,13 @@ function buildSamplePdf(): Uint8Array {
   pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\n`;
   pdf += `startxref\n${xrefStart}\n%%EOF`;
 
-  return new TextEncoder().encode(pdf);
+  return pdf;
 }
 
 export async function GET() {
-  const pdfBytes = buildSamplePdf();
+  const pdfText = buildSamplePdf();
 
-  return new Response(pdfBytes, {
+  return new Response(pdfText, {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": 'inline; filename="smeta_11-46.pdf"',

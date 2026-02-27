@@ -42,20 +42,30 @@ export async function POST(request: NextRequest) {
     }
 
     const userAgent = request.headers.get("user-agent") || undefined;
-    const isPdfMode = result.data.mode === "pdf";
+    const leadPayload =
+      result.data.mode === "pdf"
+        ? {
+            name: "Не указано",
+            activity: result.data.specialization,
+            email: result.data.email,
+            phone: "",
+            comment: "Запрос образца экспертной сметы (PDF)",
+            source: "landing_pdf",
+          }
+        : {
+            name: "Запрос тестового доступа",
+            activity: result.data.specialization,
+            email: result.data.email,
+            phone: result.data.phone || "",
+            comment: result.data.comment || null,
+            source: "landing_trial",
+          };
 
     const lead = await prisma.lead.create({
       data: {
-        name: isPdfMode ? "Не указано" : "Запрос тестового доступа",
-        activity: result.data.specialization,
-        email: result.data.email,
-        phone: isPdfMode ? "" : result.data.phone || "",
-        comment: isPdfMode
-          ? "Запрос образца экспертной сметы (PDF)"
-          : result.data.comment || null,
+        ...leadPayload,
         userAgent,
         ip,
-        source: isPdfMode ? "landing_pdf" : "landing_trial",
         status: "new",
       },
     });
