@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { leadSchema } from "@/lib/validators";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { sendLeadToTelegram } from "@/lib/telegram";
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,6 +70,12 @@ export async function POST(request: NextRequest) {
         status: "new",
       },
     });
+
+    try {
+      await sendLeadToTelegram(lead);
+    } catch (telegramError) {
+      console.error("[API /lead] Telegram notify error:", telegramError);
+    }
 
     return NextResponse.json({ success: true, id: lead.id });
   } catch (error) {
