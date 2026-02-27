@@ -1,28 +1,41 @@
 import { z } from "zod";
 
-export const ACTIVITIES = [
-  "Эксперт",
+export const SPECIALIZATIONS = [
+  "Судебный эксперт",
   "Юрист",
   "Оценщик",
-  "Подрядчик/строитель",
   "Другое",
 ] as const;
 
-export const leadSchema = z.object({
-  name: z
-    .string()
-    .min(2, "Имя должно содержать минимум 2 символа")
-    .max(100, "Слишком длинное имя"),
-  activity: z.enum(ACTIVITIES, {
-    error: "Выберите вид деятельности",
-  }),
+const emailSchema = z.string().email("Введите корректный email");
+
+const specializationSchema = z.enum(SPECIALIZATIONS, {
+  error: "Выберите специализацию",
+});
+
+const consentSchema = z.literal(true, {
+  error: "Необходимо согласие на обработку персональных данных",
+});
+
+const honeypotSchema = z.string().max(0).optional();
+
+export const pdfLeadSchema = z.object({
+  mode: z.literal("pdf"),
+  specialization: specializationSchema,
+  email: emailSchema,
+  consent: consentSchema,
+  website: honeypotSchema,
+});
+
+export const trialLeadSchema = z.object({
+  mode: z.literal("trial"),
+  specialization: specializationSchema,
   email: z.string().email("Введите корректный email"),
   phone: z
     .string()
-    .min(7, "Введите корректный номер телефона")
     .max(20, "Слишком длинный номер")
     .regex(
-      /^\+?[0-9\s\-()]{7,20}$/,
+      /^\+?[0-9\s\-()]{7,20}$|^$/,
       "Введите корректный номер телефона (формат: +7...)"
     ),
   comment: z
@@ -30,11 +43,13 @@ export const leadSchema = z.object({
     .max(1000, "Комментарий слишком длинный")
     .optional()
     .or(z.literal("")),
-  consent: z.literal(true, {
-    error: "Необходимо согласие на обработку персональных данных",
-  }),
-  // Honeypot field — must be empty
-  website: z.string().max(0).optional(),
+  consent: consentSchema,
+  website: honeypotSchema,
 });
+
+export const leadSchema = z.discriminatedUnion("mode", [
+  pdfLeadSchema,
+  trialLeadSchema,
+]);
 
 export type LeadFormData = z.infer<typeof leadSchema>;

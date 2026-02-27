@@ -19,6 +19,12 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
+    // Honeypot check
+    if (typeof body?.website === "string" && body.website.length > 0) {
+      // Silently accept but don't save (bot detected)
+      return NextResponse.json({ success: true, id: 0 });
+    }
+
     // Server-side validation
     const result = leadSchema.safeParse(body);
     if (!result.success) {
@@ -35,24 +41,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Honeypot check
-    if (body.website && body.website.length > 0) {
-      // Silently accept but don't save (bot detected)
-      return NextResponse.json({ success: true, id: 0 });
-    }
-
     const userAgent = request.headers.get("user-agent") || undefined;
+    const isPdfMode = result.data.mode === "pdf";
 
     const lead = await prisma.lead.create({
       data: {
-        name: result.data.name,
-        activity: result.data.activity,
+        name: isPdfMode ? "Не указано" : "Запрос тестового доступа",
+        activity: result.data.specialization,
         email: result.data.email,
-        phone: result.data.phone,
-        comment: result.data.comment || null,
+        phone: isPdfMode ? "" : result.data.phone || "",
+        comment: isPdfMode
+          ? "Запрос образца экспертной сметы (PDF)"
+          : result.data.comment || null,
         userAgent,
         ip,
-        source: "landing",
+        source: isPdfMode ? "landing_pdf" : "landing_trial",
         status: "new",
       },
     });

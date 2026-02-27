@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Moon, Sun, Menu, X, Triangle } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const openLeadModal = (mode: "pdf" | "trial") => {
+    window.dispatchEvent(new CustomEvent("openLeadModal", { detail: { mode } }));
+  };
 
   const navItems = [
     { label: "Кому подходит", href: "#audience" },
-    { label: "Возможности", href: "#features" },
+    { label: "Доказательная база", href: "#evidence" },
     { label: "Как работает", href: "#how-it-works" },
   ];
 
@@ -37,39 +37,35 @@ export function Header() {
               {item.label}
             </a>
           ))}
-          <a href="#cta">
-            <Button size="sm">Оставить заявку</Button>
-          </a>
-          {mounted && (
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="rounded-md p-2 hover:bg-accent transition-colors"
-              aria-label="Переключить тему"
-            >
-              {theme === "dark" ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </button>
-          )}
+          <Button size="sm" type="button" onClick={() => openLeadModal("pdf")}>
+            Получить образец
+          </Button>
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="rounded-md p-2 hover:bg-accent transition-colors"
+            aria-label="Переключить тему"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </button>
         </nav>
 
         {/* Mobile menu button */}
         <div className="flex items-center gap-2 md:hidden">
-          {mounted && (
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="rounded-md p-2 hover:bg-accent transition-colors"
-              aria-label="Переключить тему"
-            >
-              {theme === "dark" ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </button>
-          )}
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="rounded-md p-2 hover:bg-accent transition-colors"
+            aria-label="Переключить тему"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </button>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="rounded-md p-2 hover:bg-accent transition-colors"
@@ -93,11 +89,17 @@ export function Header() {
                 {item.label}
               </a>
             ))}
-            <a href="#cta" onClick={() => setMenuOpen(false)}>
-              <Button size="sm" className="w-full mt-2">
-                Оставить заявку
-              </Button>
-            </a>
+            <Button
+              size="sm"
+              className="w-full mt-2"
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                openLeadModal("pdf");
+              }}
+            >
+              Получить образец
+            </Button>
           </nav>
         </div>
       )}
