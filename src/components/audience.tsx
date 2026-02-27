@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Scale, Gavel, BarChart3, HardHat, MoreHorizontal } from "lucide-react";
+import { Scale, Gavel, BarChart3 } from "lucide-react";
 
 const audiences = [
   {
@@ -21,18 +21,6 @@ const audiences = [
     title: "Оценщик",
     description:
       "Структурированные расчёты стоимости восстановительного ремонта и строительства.",
-  },
-  {
-    icon: HardHat,
-    title: "Подрядчик",
-    description:
-      "Контроль коэффициентов, материалов и нормо-часов при составлении коммерческих смет.",
-  },
-  {
-    icon: MoreHorizontal,
-    title: "Другое",
-    description:
-      "Любой специалист, которому необходима прозрачная и верифицируемая смета.",
   },
 ];
 
