@@ -15,15 +15,15 @@ export function Methodology() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   return (
-    <section id="methodology" className="py-24 sm:py-32">
+    <section id="methodology" className="py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             Методология расчёта
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 sm:gap-6">
           {points.map((point, index) => (
             <article
               key={point}
@@ -39,7 +39,7 @@ export function Methodology() {
           ))}
         </div>
 
-        <div className="mx-auto mt-10 max-w-3xl">
+        <div className="mx-auto mt-8 max-w-3xl sm:mt-10">
           <button
             type="button"
             onClick={() => setIsPreviewOpen(true)}
@@ -48,7 +48,7 @@ export function Methodology() {
           >
             <div className="mb-4 flex items-center justify-between text-xs text-muted-foreground">
               <span>Справочные сведения / методика A1/A2</span>
-              <span>smeta_11 (46)</span>
+              <span>Превью страницы</span>
             </div>
             <Image
               src="/previews/methodology-a1-a2-page.svg"

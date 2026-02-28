@@ -4,16 +4,16 @@ import { ShieldCheck, Lock, BellOff } from "lucide-react";
 
 export function Trust() {
   return (
-    <section className="py-24 sm:py-32 bg-muted/30">
+    <section className="py-16 sm:py-24 bg-muted/30">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center">
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
           Тестовый доступ к рабочей версии
         </h2>
-        <p className="mx-auto max-w-2xl text-muted-foreground text-lg mb-12">
+        <p className="mx-auto mb-8 max-w-2xl text-base text-muted-foreground sm:mb-12 sm:text-lg">
           Оставьте заявку — предоставим доступ и поможем запустить первый расчёт.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8">
           <div className="flex flex-col items-center gap-3">
             <div className="rounded-full bg-emerald-500/10 p-3">
               <ShieldCheck className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />

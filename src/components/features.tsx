@@ -50,9 +50,9 @@ const features = [
 
 export function Features() {
   return (
-    <section id="features" className="py-24 sm:py-32 bg-muted/30">
+    <section id="features" className="py-16 sm:py-24 bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             Что делает система
           </h2>
@@ -61,7 +61,7 @@ export function Features() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
           {features.map((feature) => (
             <div
               key={feature.title}

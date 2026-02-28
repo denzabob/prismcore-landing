@@ -39,15 +39,15 @@ export function CourtEvidence() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   return (
-    <section id="evidence" className="py-24 sm:py-32 bg-muted/30">
+    <section id="evidence" className="py-16 sm:py-24 bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-center mb-14">
+        <div className="text-center mb-8 sm:mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             Доказательная база: что именно увидит суд
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3 sm:mb-10 sm:gap-6">
           {items.map((item) => (
             <article
               key={item.title}
@@ -73,7 +73,7 @@ export function CourtEvidence() {
           >
             <div className="mb-4 flex items-center justify-between text-xs text-muted-foreground">
               <span>Источники данных</span>
-              <span>smeta_11 (46)</span>
+              <span>Превью страницы</span>
             </div>
             <Image
               src="/previews/data-sources-median-page.svg"

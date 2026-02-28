@@ -28,9 +28,9 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 sm:py-32">
+    <section id="how-it-works" className="py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             Как это работает
           </h2>
@@ -39,7 +39,7 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8 lg:gap-12">
           {steps.map((step, i) => (
             <div key={step.number} className="relative text-center group">
               {/* Connector line (hidden on mobile) */}

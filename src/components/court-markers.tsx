@@ -19,9 +19,9 @@ const markers = [
 
 export function CourtMarkers() {
   return (
-    <section className="py-20 sm:py-24 bg-muted/30">
+    <section className="py-14 sm:py-20 bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="mx-auto max-w-3xl text-center mb-10">
+        <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             Что проверяет суд в экспертной смете
           </h2>
@@ -30,7 +30,7 @@ export function CourtMarkers() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 sm:gap-6">
           {markers.map((item) => (
             <article
               key={item.text}

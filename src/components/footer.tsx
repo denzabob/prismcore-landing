@@ -31,10 +31,10 @@ export function Footer() {
           <p>
             Контакты:{" "}
             <a
-              href="mailto:info@prisma-smeta.ru"
+              href="mailto:info@prismcore.ru"
               className="underline underline-offset-4 hover:text-foreground transition-colors"
             >
-              info@prisma-smeta.ru
+              info@prismcore.ru
             </a>
           </p>
         </div>

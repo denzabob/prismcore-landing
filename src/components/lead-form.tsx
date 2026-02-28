@@ -163,18 +163,18 @@ export function LeadForm() {
   };
 
   return (
-    <section id="cta" className="py-24 sm:py-32">
+    <section id="cta" className="py-16 sm:py-24">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <div className="mb-6 rounded-2xl border border-border/60 bg-muted/30 p-6">
+        <div className="mb-5 rounded-2xl border border-border/60 bg-muted/30 p-5 sm:mb-6 sm:p-6">
           <h3 className="text-xl sm:text-2xl font-semibold tracking-tight mb-4">
             Что вы получите после заявки
           </h3>
           <ul className="space-y-2 text-sm sm:text-base text-muted-foreground">
-            <li>✔ Образец экспертной сметы с раскрытой методикой</li>
-            <li>✔ Расчёт рыночной ставки часа с формулой</li>
-            <li>✔ Проверяемые источники цен</li>
-            <li>✔ PDF с QR-верификацией</li>
-            <li>✔ Доступ без обязательств</li>
+            <li className="break-words">✔ Образец экспертной сметы с раскрытой методикой</li>
+            <li className="break-words">✔ Расчёт рыночной ставки часа с формулой</li>
+            <li className="break-words">✔ Проверяемые источники цен</li>
+            <li className="break-words">✔ PDF с QR-верификацией</li>
+            <li className="break-words">✔ Доступ без обязательств</li>
           </ul>
         </div>
 
@@ -183,16 +183,16 @@ export function LeadForm() {
             <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground mb-3">
               Выбор
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+            <h2 className="break-words text-2xl sm:text-4xl font-bold tracking-tight mb-4">
               Получить образец и тестовый доступ
             </h2>
-            <p className="text-muted-foreground text-lg mb-8">
+            <p className="break-words text-muted-foreground text-base sm:text-lg mb-8">
               Откройте форму в модальном окне и выберите нужный режим.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button
                 type="button"
-                className="h-11"
+                className="h-auto w-full whitespace-normal px-4 py-3 text-center sm:w-auto"
                 onClick={() => {
                   setActiveTab("pdf");
                   setIsOpen(true);
@@ -203,7 +203,7 @@ export function LeadForm() {
               <Button
                 type="button"
                 variant="outline"
-                className="h-11"
+                className="h-auto w-full whitespace-normal px-4 py-3 text-center sm:w-auto"
                 onClick={() => {
                   setActiveTab("trial");
                   setIsOpen(true);
@@ -222,7 +222,7 @@ export function LeadForm() {
           onClick={closeModal}
         >
           <div
-            className="relative w-full max-w-xl rounded-2xl border border-border bg-background"
+            className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-border bg-background"
             onClick={(event) => event.stopPropagation()}
           >
             <button
@@ -235,7 +235,7 @@ export function LeadForm() {
             </button>
 
             <div className="border-b border-border p-4 sm:p-6">
-              <div className="grid grid-cols-2 gap-2 rounded-lg bg-muted p-1">
+              <div className="grid grid-cols-1 gap-2 rounded-lg bg-muted p-1 sm:grid-cols-2">
                 <button
                   type="button"
                   onClick={() => switchTab("pdf")}
@@ -245,7 +245,7 @@ export function LeadForm() {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  Образец сметы (PDF)
+                  <span className="block break-words text-center">Образец сметы (PDF)</span>
                 </button>
                 <button
                   type="button"
@@ -256,7 +256,7 @@ export function LeadForm() {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  Тестовый доступ
+                  <span className="block break-words text-center">Тестовый доступ</span>
                 </button>
               </div>
             </div>

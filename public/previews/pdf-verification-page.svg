@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620">
   <rect width="960" height="620" fill="#f4f6f8"/>
   <rect x="120" y="48" width="720" height="524" rx="16" fill="#ffffff" stroke="#d4dbe3"/>
-  <text x="156" y="110" fill="#1f2937" font-size="28" font-family="Arial, sans-serif" font-weight="700">Смета № smeta_11 (46)</text>
+  <text x="156" y="110" fill="#1f2937" font-size="28" font-family="Arial, sans-serif" font-weight="700">Экспертная смета</text>
   <text x="156" y="146" fill="#475569" font-size="18" font-family="Arial, sans-serif">Проверка подлинности документа</text>
   <line x1="156" y1="164" x2="804" y2="164" stroke="#e2e8f0"/>
   <rect x="156" y="196" width="430" height="188" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>

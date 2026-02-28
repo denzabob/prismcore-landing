@@ -26,9 +26,9 @@ const audiences = [
 
 export function Audience() {
   return (
-    <section id="audience" className="py-24 sm:py-32">
+    <section id="audience" className="py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             Кому подходит
           </h2>

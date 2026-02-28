@@ -40,15 +40,15 @@ export function Faq() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section id="faq" className="py-24 sm:py-32">
+    <section id="faq" className="py-16 sm:py-24">
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             FAQ
           </h2>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-4 sm:space-y-5">
           {faqItems.map((item, index) => (
             <article
               key={item.question}

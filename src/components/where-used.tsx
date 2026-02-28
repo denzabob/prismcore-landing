@@ -9,9 +9,9 @@ const usageItems = [
 
 export function WhereUsed() {
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-14 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="mx-auto max-w-3xl text-center mb-10">
+        <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             Где эксперты применяют Призму
           </h2>

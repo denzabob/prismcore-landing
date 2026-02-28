@@ -3,82 +3,91 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, X } from "lucide-react";
-import Image from "next/image";
 
 export function Hero() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const documentPreviewPdfSrc = "/api/sample-estimate-pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH";
+
   const openLeadModal = (mode: "pdf" | "trial") => {
     window.dispatchEvent(new CustomEvent("openLeadModal", { detail: { mode } }));
   };
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-16">
+    <section className="relative flex items-center justify-center overflow-hidden px-0 pb-12 pt-20 sm:min-h-[90vh] sm:pb-16 sm:pt-16">
       {/* Background gradient */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-br from-blue-500/20 via-violet-500/10 to-transparent rounded-full blur-3xl dark:from-blue-500/10 dark:via-violet-500/5" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-tl from-emerald-500/10 to-transparent rounded-full blur-3xl dark:from-emerald-500/5" />
       </div>
 
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="text-center lg:text-left">
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-4 py-1.5 text-sm text-muted-foreground">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-          </span>
-          Открыт набор на тестовый период
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 sm:gap-12 sm:px-6">
+        <div className="min-w-0 text-center">
+          <div className="mb-8 inline-flex max-w-full items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-4 py-1.5 text-center text-xs text-muted-foreground sm:text-sm">
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            </span>
+            <span className="break-words">Открыт набор на тестовый период</span>
           </div>
 
-          <h1 className="mb-6 text-4xl font-bold tracking-tight leading-[1.1] sm:text-5xl lg:text-6xl">
+          <h1 className="mt-3 mb-6 break-words bg-gradient-to-r from-slate-950 via-blue-700 to-cyan-600 bg-clip-text text-3xl font-bold tracking-tight text-transparent leading-[1.1] dark:from-white dark:via-blue-300 dark:to-cyan-300 sm:mt-4 sm:text-5xl lg:text-6xl">
             Смета, которую сложно оспорить в суде
           </h1>
 
-          <p className="mx-auto mb-4 max-w-2xl text-lg text-muted-foreground leading-relaxed sm:text-xl lg:mx-0">
+          <p className="mx-auto mb-4 max-w-2xl break-words text-base text-muted-foreground leading-relaxed sm:text-xl">
             Автоматически формируйте экономически и методически обоснованный расчёт стоимости устранения дефектов мебели — с раскрытием источников цен, норм времени и формулы рыночной ставки часа.
           </p>
-          <p className="mx-auto mb-10 max-w-2xl text-sm text-muted-foreground/90 sm:text-base lg:mx-0">
+          <p className="mx-auto mb-6 max-w-2xl break-words text-sm text-muted-foreground/90 sm:text-base">
             PDF с QR-верификацией и hash. Готово для приложения к экспертному заключению.
           </p>
-          <p className="mx-auto mb-10 max-w-2xl text-xs text-muted-foreground sm:text-sm lg:mx-0">
+          <p className="mx-auto mb-8 max-w-2xl break-words text-xs text-muted-foreground sm:text-sm">
             Формат отчёта разработан под требования судебной и досудебной экспертизы.
           </p>
 
-          <div className="flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
+          <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:justify-center">
             <Button
               type="button"
               size="lg"
-              className="h-12 px-8 text-base"
+              className="h-auto w-full max-w-sm whitespace-normal px-6 py-3 text-center text-sm sm:w-auto sm:text-base"
               onClick={() => openLeadModal("pdf")}
             >
               Получить образец экспертной сметы (PDF)
             </Button>
-            <a href="#evidence">
-              <Button variant="outline" size="lg" className="h-12 px-8 text-base">
+            <a href="#evidence" className="w-full max-w-sm sm:w-auto">
+              <Button
+                variant="outline"
+                size="lg"
+                className="h-auto w-full whitespace-normal px-6 py-3 text-center text-sm sm:text-base"
+              >
                 Посмотреть, как обосновывается ставка часа
               </Button>
             </a>
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-md lg:mx-0">
+        <div className="w-full">
           <button
             type="button"
             onClick={() => setIsPreviewOpen(true)}
-            className="group w-full rounded-2xl border border-border/60 bg-card/80 p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+            className="group relative block w-full overflow-hidden rounded-[2rem] border border-border/60 bg-card/90 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
             aria-label="Открыть PDF-превью сметы"
           >
-            <div className="mb-4 flex items-center justify-between text-xs text-muted-foreground">
-              <span>smeta_11 (46)</span>
+            <div className="flex items-center justify-between px-5 pb-3 pt-5 text-xs text-muted-foreground sm:px-6">
+              <span>Превью документа</span>
               <span>1 / 1</span>
             </div>
-            <Image
-              src="/previews/pdf-verification-page.svg"
-              alt="Превью первой страницы PDF: проверка подлинности, QR и hash"
-              width={960}
-              height={620}
-              className="h-auto w-full rounded-xl border border-border/60"
-            />
-            <p className="mt-3 text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+
+            <div className="relative overflow-hidden rounded-[1.4rem] border-y border-border/60 bg-slate-100/70">
+              <div className="relative aspect-[16/11] w-full bg-white">
+                <iframe
+                  title="Встроенное превью первой страницы PDF"
+                  src={documentPreviewPdfSrc}
+                  className="h-full w-full"
+                />
+              </div>
+            </div>
+
+            <p className="px-5 py-4 text-xs text-muted-foreground transition-colors group-hover:text-foreground sm:px-6">
               Нажмите для встроенного просмотра PDF
             </p>
           </button>
@@ -110,7 +119,7 @@ export function Hero() {
             </button>
             <iframe
               title="PDF-превью сметы"
-              src="/api/sample-estimate-pdf#toolbar=0&navpanes=0&scrollbar=0"
+              src={documentPreviewPdfSrc}
               className="h-full w-full"
             />
           </div>
