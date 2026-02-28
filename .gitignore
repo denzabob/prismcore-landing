@@ -42,3 +42,9 @@ next-env.d.ts
 README.md
 
 /src/generated/prisma
+
+# Prisma local/dev database (must NOT be in git)
+prisma/dev.db
+prisma/dev.db-journal
+prisma/dev.db-wal
+prisma/dev.db-shm
