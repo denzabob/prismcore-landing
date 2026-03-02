@@ -31,6 +31,28 @@ export async function sendLeadToTelegram(lead: Lead): Promise<void> {
     `Дата: ${escapeHtml(lead.createdAt.toISOString())}`,
   ].join("\n");
 
+  await sendTelegramMessage(text);
+}
+
+export async function sendAdminCodeToTelegram(login: string, code: string): Promise<void> {
+  const text = [
+    "<b>Вход в админ-панель Prismcore</b>",
+    `Логин: <b>${escapeHtml(login)}</b>`,
+    `Код входа: <code>${escapeHtml(code)}</code>`,
+    "Код действует 10 минут.",
+  ].join("\n");
+
+  await sendTelegramMessage(text);
+}
+
+async function sendTelegramMessage(text: string): Promise<void> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!token || !chatId) {
+    return;
+  }
+
   const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
     headers: {

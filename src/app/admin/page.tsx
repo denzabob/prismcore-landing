@@ -36,9 +36,13 @@ interface LeadsResponse {
 }
 
 export default function AdminPage() {
-  const [token, setToken] = useState("");
+  const [loginInput, setLoginInput] = useState("");
+  const [codeInput, setCodeInput] = useState("");
+  const [loginStep, setLoginStep] = useState<"login" | "code">("login");
   const [authenticated, setAuthenticated] = useState(false);
-  const [tokenInput, setTokenInput] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -47,11 +51,10 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
 
   const fetchLeads = useCallback(
-    async (tkn: string, searchQuery: string, pg: number) => {
+    async (searchQuery: string, pg: number) => {
       setLoading(true);
       try {
         const params = new URLSearchParams({
-          token: tkn,
           page: pg.toString(),
         });
         if (searchQuery) params.set("search", searchQuery);
@@ -60,7 +63,9 @@ export default function AdminPage() {
         if (!res.ok) {
           if (res.status === 401) {
             setAuthenticated(false);
-            setToken("");
+            setLoginStep("login");
+            setCodeInput("");
+            setAuthError("Сессия истекла. Войдите заново.");
             return;
           }
           return;
@@ -80,32 +85,112 @@ export default function AdminPage() {
   );
 
   useEffect(() => {
-    // Check for token in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlToken = urlParams.get("token");
-    if (urlToken) {
-      setToken(urlToken);
-      setAuthenticated(true);
-    }
+    const restoreSession = async () => {
+      try {
+        const res = await fetch("/api/admin/leads?page=1");
+        if (!res.ok) {
+          if (res.status === 401) {
+            return;
+          }
+          return;
+        }
+
+        const data: LeadsResponse = await res.json();
+        setLeads(data.leads);
+        setTotalPages(data.totalPages);
+        setTotal(data.total);
+        setAuthenticated(true);
+      } catch (e) {
+        console.error("Error restoring admin session:", e);
+      } finally {
+        setCheckingSession(false);
+      }
+    };
+
+    restoreSession();
   }, []);
 
   useEffect(() => {
-    if (authenticated && token) {
-      fetchLeads(token, search, page);
+    if (authenticated) {
+      fetchLeads(search, page);
     }
-  }, [authenticated, token, search, page, fetchLeads]);
+  }, [authenticated, search, page, fetchLeads]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleRequestCode = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (tokenInput.trim()) {
-      setToken(tokenInput.trim());
+
+    setAuthError("");
+
+    if (!loginInput.trim()) {
+      setAuthError("Введите логин.");
+      return;
+    }
+
+    setAuthLoading(true);
+    try {
+      const res = await fetch("/api/admin/auth/request-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ login: loginInput.trim() }),
+      });
+
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null;
+        setAuthError(data?.error || "Не удалось отправить код.");
+        return;
+      }
+
+      setLoginStep("code");
+      setCodeInput("");
+    } catch (e) {
+      console.error("Error requesting admin code:", e);
+      setAuthError("Не удалось отправить код.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleVerifyCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setAuthError("");
+
+    if (!/^\d{6}$/.test(codeInput.trim())) {
+      setAuthError("Введите 6-значный код.");
+      return;
+    }
+
+    setAuthLoading(true);
+    try {
+      const res = await fetch("/api/admin/auth/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          login: loginInput.trim(),
+          code: codeInput.trim(),
+        }),
+      });
+
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null;
+        setAuthError(data?.error || "Не удалось подтвердить код.");
+        return;
+      }
+
       setAuthenticated(true);
+      setPage(1);
+      await fetchLeads(search, 1);
+    } catch (e) {
+      console.error("Error verifying admin code:", e);
+      setAuthError("Не удалось подтвердить код.");
+    } finally {
+      setAuthLoading(false);
     }
   };
 
   const handleMarkContacted = async (id: number) => {
     try {
-      const res = await fetch(`/api/admin/leads?token=${token}`, {
+      const res = await fetch("/api/admin/leads", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, status: "contacted" }),
@@ -121,8 +206,16 @@ export default function AdminPage() {
   };
 
   const handleExportCSV = () => {
-    window.open(`/api/admin/export?token=${token}`, "_blank");
+    window.open("/api/admin/export", "_blank");
   };
+
+  if (checkingSession) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 text-sm text-muted-foreground">
+        Проверка доступа...
+      </div>
+    );
+  }
 
   if (!authenticated) {
     return (
@@ -133,19 +226,77 @@ export default function AdminPage() {
               <Triangle className="h-5 w-5 text-primary fill-primary" />
               Призма — Admin
             </div>
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form
+              onSubmit={loginStep === "login" ? handleRequestCode : handleVerifyCode}
+              className="space-y-4"
+            >
               <div className="space-y-2">
-                <Input
-                  type="password"
-                  placeholder="Введите токен доступа"
-                  value={tokenInput}
-                  onChange={(e) => setTokenInput(e.target.value)}
-                />
+                {loginStep === "login" ? (
+                  <Input
+                    type="text"
+                    placeholder="Введите логин"
+                    value={loginInput}
+                    onChange={(e) => setLoginInput(e.target.value)}
+                    autoComplete="username"
+                  />
+                ) : (
+                  <>
+                    <Input
+                      type="text"
+                      value={loginInput}
+                      readOnly
+                      className="bg-muted"
+                    />
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={6}
+                      placeholder="Введите 6-значный код"
+                      value={codeInput}
+                      onChange={(e) =>
+                        setCodeInput(e.target.value.replace(/\D/g, "").slice(0, 6))
+                      }
+                      autoComplete="one-time-code"
+                    />
+                  </>
+                )}
               </div>
-              <Button type="submit" className="w-full">
+              {authError && (
+                <p className="text-sm text-destructive">
+                  {authError}
+                </p>
+              )}
+              {loginStep === "code" && (
+                <p className="text-sm text-muted-foreground">
+                  Код отправлен в Telegram-чат уведомлений.
+                </p>
+              )}
+              <Button type="submit" className="w-full" disabled={authLoading}>
                 <LogIn className="mr-2 h-4 w-4" />
-                Войти
+                {loginStep === "login"
+                  ? authLoading
+                    ? "Отправка кода..."
+                    : "Получить код"
+                  : authLoading
+                    ? "Проверка..."
+                    : "Подтвердить вход"}
               </Button>
+              {loginStep === "code" && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    setLoginStep("login");
+                    setCodeInput("");
+                    setAuthError("");
+                  }}
+                  disabled={authLoading}
+                >
+                  Изменить логин
+                </Button>
+              )}
             </form>
           </CardContent>
         </Card>

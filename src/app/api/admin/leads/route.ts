@@ -1,19 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-
-function checkAdminToken(request: NextRequest): boolean {
-  const token = process.env.ADMIN_TOKEN;
-  if (!token) return false;
-
-  const url = new URL(request.url);
-  const queryToken = url.searchParams.get("token");
-  const headerToken = request.headers.get("x-admin-token");
-
-  return queryToken === token || headerToken === token;
-}
+import { hasValidAdminSession } from "@/lib/admin-auth";
 
 export async function GET(request: NextRequest) {
-  if (!checkAdminToken(request)) {
+  if (!hasValidAdminSession(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -51,7 +41,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!checkAdminToken(request)) {
+  if (!hasValidAdminSession(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
