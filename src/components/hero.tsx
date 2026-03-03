@@ -7,6 +7,12 @@ import { ArrowDown, X } from "lucide-react";
 export function Hero() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const documentPreviewPdfSrc = "/api/sample-estimate-pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH";
+  const painPoints = [
+    "Ручной сбор цен.",
+    "Нет стандарта расчёта.",
+    "Смету оспаривают.",
+    "Требуют раскрыть расчёт.",
+  ];
 
   const openLeadModal = (mode: "pdf" | "trial") => {
     window.dispatchEvent(new CustomEvent("openLeadModal", { detail: { mode } }));
@@ -31,14 +37,30 @@ export function Hero() {
           </div>
 
           <h1 className="mt-3 mb-6 break-words bg-gradient-to-r from-slate-950 via-blue-700 to-cyan-600 bg-clip-text text-3xl font-bold tracking-tight text-transparent leading-[1.1] dark:from-white dark:via-blue-300 dark:to-cyan-300 sm:mt-4 sm:text-5xl lg:text-6xl">
-            Смета, которую сложно оспорить в суде
+            Перестаньте собирать сметы вручную
           </h1>
 
+          <div className="mx-auto mb-8 max-w-4xl rounded-3xl border border-border/60 bg-background/80 p-5 text-left shadow-sm backdrop-blur sm:p-6">
+            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+              Чем вы страдаете сейчас
+            </p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {painPoints.map((point) => (
+                <div
+                  key={point}
+                  className="rounded-2xl border border-border/50 bg-muted/40 px-4 py-3 text-sm text-foreground sm:text-base"
+                >
+                  {point}
+                </div>
+              ))}
+            </div>
+          </div>
+
           <p className="mx-auto mb-4 max-w-2xl break-words text-base text-muted-foreground leading-relaxed sm:text-xl">
-            Автоматически формируйте экономически и методически обоснованный расчёт стоимости устранения дефектов мебели — с раскрытием источников цен, норм времени и формулы рыночной ставки часа.
+            Автоматизированная методика с раскрытием источников, норм и формул — готовая к судебной проверке.
           </p>
           <p className="mx-auto mb-6 max-w-2xl break-words text-sm text-muted-foreground/90 sm:text-base">
-            PDF с QR-верификацией и hash. Готово для приложения к экспертному заключению.
+            Формируйте расчёт с прозрачной методикой и источниками — без ручной сборки.
           </p>
           <p className="mx-auto mb-8 max-w-2xl break-words text-xs text-muted-foreground sm:text-sm">
             Формат отчёта разработан под требования судебной и досудебной экспертизы.
@@ -49,19 +71,10 @@ export function Hero() {
               type="button"
               size="lg"
               className="h-auto w-full max-w-sm whitespace-normal px-6 py-3 text-center text-sm sm:w-auto sm:text-base"
-              onClick={() => openLeadModal("pdf")}
+              onClick={() => openLeadModal("trial")}
             >
-              Получить образец экспертной сметы (PDF)
+              Тестировать Призму
             </Button>
-            <a href="#evidence" className="w-full max-w-sm sm:w-auto">
-              <Button
-                variant="outline"
-                size="lg"
-                className="h-auto w-full whitespace-normal px-6 py-3 text-center text-sm sm:text-base"
-              >
-                Посмотреть, как обосновывается ставка часа
-              </Button>
-            </a>
           </div>
         </div>
 

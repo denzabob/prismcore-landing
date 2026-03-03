@@ -1,50 +1,36 @@
 "use client";
 
 import {
-  FileText,
-  QrCode,
-  ShoppingCart,
-  Clock,
-  ListTree,
-  SlidersHorizontal,
+  CheckCircle2,
+  SearchCheck,
+  MessageSquareWarning,
+  Scale,
 } from "lucide-react";
 
 const features = [
   {
-    icon: FileText,
-    title: "Экспертный PDF для приложения к заключению",
+    icon: SearchCheck,
+    title: "Нет нужды вручную собирать цены и источники",
     description:
-      "Автоматическое формирование сметной документации в формате PDF, готовой для приложения к заключению.",
+      "Система подтягивает источники, фиксирует диапазоны цен и сохраняет их в составе расчёта.",
   },
   {
-    icon: QrCode,
-    title: "Проверка подлинности: QR + hash + версия",
+    icon: CheckCircle2,
+    title: "Отчёт можно воспроизвести шаг за шагом",
     description:
-      "Каждый документ содержит QR-код для быстрой проверки подлинности и целостности расчётов.",
+      "Каждая цифра в смете привязана к формуле, норме времени и источнику, поэтому расчёт проверяется без догадок.",
   },
   {
-    icon: ShoppingCart,
-    title: "Раскрытые источники цен и метод агрегации",
+    icon: MessageSquareWarning,
+    title: "Меньше замечаний от экспертов и заказчиков",
     description:
-      "Актуальная база поставщиков и рыночных цен для объективного обоснования стоимости материалов.",
+      "Прозрачная структура отчёта снижает количество вопросов по методике, ставкам и входным данным.",
   },
   {
-    icon: Clock,
-    title: "Нормы времени и детализация трудозатрат",
+    icon: Scale,
+    title: "Меньше ручных правок и судебных проволочек",
     description:
-      "Справочник нормативных трудозатрат для точного расчёта стоимости работ.",
-  },
-  {
-    icon: ListTree,
-    title: "Структурирование сметы",
-    description:
-      "Разделение расчётов на логические блоки: демонтаж, материалы, работы, сопутствующие расходы.",
-  },
-  {
-    icon: SlidersHorizontal,
-    title: "Региональные коэффициенты и условия выполнения работ",
-    description:
-      "Настройка региональных, сезонных и прочих поправочных коэффициентов для корректного расчёта.",
+      "Если расчёт уже собран по стандарту, правки вносятся быстрее, а позицию проще защищать в споре.",
   },
 ];
 
@@ -54,30 +40,31 @@ export function Features() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="text-center mb-10 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-            Что делает система
+            Как Призма решает эти боли
           </h2>
           <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
-            Инструменты, которые помогают обосновать каждую строку сметы.
+            Не набор функций, а конкретный результат для эксперта, юриста и заказчика.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
-          {features.map((feature) => (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+          {features.map((feature, index) => (
             <div
               key={feature.title}
-              className="group flex gap-4"
+              className="group rounded-2xl border border-border/50 bg-background p-6 shadow-sm"
             >
-              <div className="shrink-0 mt-1">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+                  Результат {index + 1}
+                </span>
                 <div className="rounded-lg bg-primary/10 p-2.5 group-hover:bg-primary/20 transition-colors">
                   <feature.icon className="h-5 w-5 text-primary" />
                 </div>
               </div>
-              <div>
-                <h3 className="font-semibold mb-1">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
-              </div>
+              <h3 className="mb-2 text-lg font-semibold">{feature.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>

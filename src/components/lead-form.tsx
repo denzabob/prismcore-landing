@@ -54,10 +54,8 @@ export function LeadForm() {
   useEffect(() => {
     const onOpenModal = (event: Event) => {
       const customEvent = event as CustomEvent<{ mode?: LeadMode }>;
-      const mode = customEvent.detail?.mode;
-      if (mode === "pdf" || mode === "trial") {
-        setActiveTab(mode);
-      }
+      void customEvent;
+      setActiveTab("trial");
       setStatus("idle");
       setErrors({});
       setServerError("");
@@ -95,13 +93,6 @@ export function LeadForm() {
         return next;
       });
     }
-  };
-
-  const switchTab = (mode: LeadMode) => {
-    setActiveTab(mode);
-    setErrors({});
-    setServerError("");
-    setStatus("idle");
   };
 
   const closeModal = () => {
@@ -170,10 +161,10 @@ export function LeadForm() {
             Что вы получите после заявки
           </h3>
           <ul className="space-y-2 text-sm sm:text-base text-muted-foreground">
-            <li className="break-words">✔ Образец экспертной сметы с раскрытой методикой</li>
-            <li className="break-words">✔ Расчёт рыночной ставки часа с формулой</li>
-            <li className="break-words">✔ Проверяемые источники цен</li>
-            <li className="break-words">✔ PDF с QR-верификацией</li>
+            <li className="break-words">✔ Понимание, где ваш текущий расчёт уязвим</li>
+            <li className="break-words">✔ Сравнение ручной сметы с подходом Призмы</li>
+            <li className="break-words">✔ Примеры отчётов с раскрытой методикой</li>
+            <li className="break-words">✔ Консультация по запуску первого расчёта</li>
             <li className="break-words">✔ Доступ без обязательств</li>
           </ul>
         </div>
@@ -184,32 +175,21 @@ export function LeadForm() {
               Выбор
             </p>
             <h2 className="break-words text-2xl sm:text-4xl font-bold tracking-tight mb-4">
-              Получить образец и тестовый доступ
+              Тестирование/консультация
             </h2>
             <p className="break-words text-muted-foreground text-base sm:text-lg mb-8">
-              Откройте форму в модальном окне и выберите нужный режим.
+              Откройте форму, чтобы запросить тестирование, консультацию или сравнение текущего расчёта.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex justify-center">
               <Button
                 type="button"
-                className="h-auto w-full whitespace-normal px-4 py-3 text-center sm:w-auto"
-                onClick={() => {
-                  setActiveTab("pdf");
-                  setIsOpen(true);
-                }}
-              >
-                Образец сметы (PDF)
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="h-auto w-full whitespace-normal px-4 py-3 text-center sm:w-auto"
+                className="h-auto w-full max-w-sm whitespace-normal px-4 py-3 text-center"
                 onClick={() => {
                   setActiveTab("trial");
                   setIsOpen(true);
                 }}
               >
-                Тестовый доступ
+                Тестировать Призму
               </Button>
             </div>
           </CardContent>
@@ -235,30 +215,9 @@ export function LeadForm() {
             </button>
 
             <div className="border-b border-border p-4 sm:p-6">
-              <div className="grid grid-cols-1 gap-2 rounded-lg bg-muted p-1 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => switchTab("pdf")}
-                  className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                    activeTab === "pdf"
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <span className="block break-words text-center">Образец сметы (PDF)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => switchTab("trial")}
-                  className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                    activeTab === "trial"
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <span className="block break-words text-center">Тестовый доступ</span>
-                </button>
-              </div>
+              <p className="text-center text-sm font-medium text-foreground">
+                Тестирование/консультация
+              </p>
             </div>
 
             <div className="p-4 sm:p-6">
@@ -415,9 +374,9 @@ export function LeadForm() {
                         Отправка...
                       </>
                     ) : activeTab === "pdf" ? (
-                      "Получить PDF"
+                      "Получить примеры"
                     ) : (
-                      "Начать тестовый период"
+                      "Запросить консультацию"
                     )}
                   </Button>
 

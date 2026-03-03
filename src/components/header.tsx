@@ -14,8 +14,9 @@ export function Header() {
 
   const navItems = [
     { label: "Кому подходит", href: "#audience" },
+    { label: "Сравнение", href: "#comparison" },
     { label: "Доказательная база", href: "#evidence" },
-    { label: "Как работает", href: "#how-it-works" },
+    { label: "Результат", href: "#results" },
   ];
 
   return (
@@ -37,8 +38,8 @@ export function Header() {
               {item.label}
             </a>
           ))}
-          <Button size="sm" type="button" onClick={() => openLeadModal("pdf")}>
-            Получить образец
+          <Button size="sm" type="button" onClick={() => openLeadModal("trial")}>
+            Тестировать Призму
           </Button>
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -95,10 +96,10 @@ export function Header() {
               type="button"
               onClick={() => {
                 setMenuOpen(false);
-                openLeadModal("pdf");
+                openLeadModal("trial");
               }}
             >
-              Получить образец
+              Тестировать Призму
             </Button>
           </nav>
         </div>

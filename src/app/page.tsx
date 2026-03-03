@@ -11,6 +11,8 @@ import { WhereUsed } from "@/components/where-used";
 import { Trust } from "@/components/trust";
 import { LeadForm } from "@/components/lead-form";
 import { Footer } from "@/components/footer";
+import { ResultsCases } from "@/components/results-cases";
+import { Comparison } from "@/components/comparison";
 
 export default function Home() {
   return (
@@ -23,8 +25,10 @@ export default function Home() {
         <CourtMarkers />
         <Audience />
         <Features />
+        <Comparison />
         <HowItWorks />
         <WhereUsed />
+        <ResultsCases />
         <Trust />
         <LeadForm />
         <Faq />

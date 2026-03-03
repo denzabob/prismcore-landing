@@ -1,28 +1,25 @@
 "use client";
 
-import { Upload, Settings, FileOutput } from "lucide-react";
+import { Database, ListChecks, ShieldCheck } from "lucide-react";
 
 const steps = [
   {
-    number: "01",
-    icon: Upload,
-    title: "Фиксируете дефекты и состав работ",
-    description:
-      "Фиксируете дефекты и состав работ.",
+    icon: Database,
+    problem: "Нет единого списка цен, норм и исходников.",
+    system: "Призма подтягивает данные, фиксирует источники и стандартизирует методику расчёта.",
+    result: "Эксперт получает документ, понятный проверяющим и суду.",
   },
   {
-    number: "02",
-    icon: Settings,
-    title: "Система подтягивает цены/нормы и считает ставку часа",
-    description:
-      "Система подтягивает цены/нормы и считает ставку часа.",
+    icon: ListChecks,
+    problem: "Расчёт приходится пересчитывать и объяснять вручную.",
+    system: "Система раскрывает формулы, норму времени и логику агрегации по каждой позиции.",
+    result: "Эксперт получает воспроизводимый отчёт без ручной расшифровки каждой строки.",
   },
   {
-    number: "03",
-    icon: FileOutput,
-    title: "Получаете PDF с раскрытой методикой, источниками и верификацией",
-    description:
-      "Получаете PDF с раскрытой методикой, источниками и верификацией.",
+    icon: ShieldCheck,
+    problem: "Замечания затягивают дело и увеличивают число переделок.",
+    system: "Призма формирует PDF с доказательной базой, QR-верификацией, hash и версией документа.",
+    result: "Эксперт получает материал, который проще защищать в переписке, экспертизе и суде.",
   },
 ];
 
@@ -32,35 +29,49 @@ export function HowItWorks() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="text-center mb-10 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-            Как это работает
+            Как выглядит процесс в результате
           </h2>
           <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
-            Три простых шага от исходных данных до готовой сметы.
+            От типовой проблемы к понятному для суда и заказчика результату.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8 lg:gap-12">
-          {steps.map((step, i) => (
-            <div key={step.number} className="relative text-center group">
-              {/* Connector line (hidden on mobile) */}
-              {i < steps.length - 1 && (
-                <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-[1px] bg-border" />
-              )}
-
-              <div className="relative inline-flex mb-6">
-                <div className="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-5 group-hover:from-primary/20 group-hover:to-primary/10 transition-colors">
+        <div className="grid grid-cols-1 gap-6 lg:gap-8">
+          {steps.map((step, index) => (
+            <article
+              key={step.problem}
+              className="rounded-3xl border border-border/60 bg-background p-6 shadow-sm sm:p-8"
+            >
+              <div className="mb-5 flex items-center gap-3">
+                <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+                  Сценарий {index + 1}
+                </span>
+                <div className="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-3">
                   <step.icon className="h-8 w-8 text-primary" />
                 </div>
-                <span className="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
-                  {step.number}
-                </span>
               </div>
 
-              <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
-                {step.description}
-              </p>
-            </div>
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                <div className="rounded-2xl bg-muted/40 p-5">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                    Проблема
+                  </p>
+                  <p className="text-sm leading-relaxed">{step.problem}</p>
+                </div>
+                <div className="rounded-2xl bg-primary/5 p-5">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+                    Что делает система
+                  </p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{step.system}</p>
+                </div>
+                <div className="rounded-2xl bg-emerald-500/5 p-5">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-emerald-700 dark:text-emerald-400">
+                    Что получает эксперт
+                  </p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{step.result}</p>
+                </div>
+              </div>
+            </article>
           ))}
         </div>
       </div>
