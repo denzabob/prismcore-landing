@@ -33,10 +33,14 @@ export const trialLeadSchema = z.object({
   email: z.string().email("Введите корректный email"),
   phone: z
     .string()
-    .max(20, "Слишком длинный номер")
-    .regex(
-      /^\+?[0-9\s\-()]{7,20}$|^$/,
-      "Введите корректный номер телефона (формат: +7...)"
+    .refine(
+      (val) => {
+        if (!val) return true; // Телефон опционален
+        // Проверяем что есть минимум 7 цифр/символов
+        const digitsOnly = val.replace(/\D/g, "");
+        return digitsOnly.length >= 7 && val.length <= 25;
+      },
+      "Введите корректный номер телефона (минимум 7 цифр)"
     ),
   comment: z
     .string()

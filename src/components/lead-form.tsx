@@ -44,7 +44,7 @@ const initialTrialData = {
 
 export function LeadForm() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<LeadMode>("pdf");
+  const [activeTab, setActiveTab] = useState<LeadMode>("trial");
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState("");
@@ -108,7 +108,18 @@ export function LeadForm() {
     setServerError("");
 
     const schema = activeTab === "pdf" ? pdfLeadSchema : trialLeadSchema;
-    const data = activeTab === "pdf" ? pdfData : trialData;
+    let data = activeTab === "pdf" ? pdfData : trialData;
+    
+    // Убедимся что honeypot поле пусто
+    if (data.website) {
+      console.log("[FormDebug] Honeypot field filled, rejecting submission");
+      setServerError("Ошибка при отправке формы");
+      setStatus("error");
+      return;
+    }
+    
+    console.log("[FormDebug] Submitting:", { activeTab, data });
+    
     const result = schema.safeParse(data);
 
     if (!result.success) {
@@ -119,20 +130,36 @@ export function LeadForm() {
           fieldErrors[field] = issue.message;
         }
       }
+      console.log("[FormDebug] Validation errors:", fieldErrors);
       setErrors(fieldErrors);
+      setStatus("error");
+      
+      // Скролл к верхней части формы
+      setTimeout(() => {
+        const formContainer = document.getElementById("form-container");
+        if (formContainer) {
+          formContainer.scrollTop = 0;
+        }
+      }, 0);
+      
       return;
     }
 
     setStatus("loading");
 
     try {
+      console.log("[FormDebug] Sending to API:", result.data);
+      
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(result.data),
       });
 
+      console.log("[FormDebug] Response status:", res.status);
+      
       const dataResponse = await res.json();
+      console.log("[FormDebug] Response data:", dataResponse);
 
       if (!res.ok) {
         setServerError(dataResponse.error || "Ошибка при отправке. Попробуйте позже.");
@@ -141,7 +168,8 @@ export function LeadForm() {
       }
 
       setStatus("success");
-    } catch {
+    } catch (error) {
+      console.error("[FormDebug] Error:", error);
       setServerError("Ошибка сети. Проверьте подключение и попробуйте ещё раз.");
       setStatus("error");
     }
@@ -202,56 +230,61 @@ export function LeadForm() {
           onClick={closeModal}
         >
           <div
-            className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-border bg-background"
+            className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-2xl border border-border bg-background flex flex-col"
             onClick={(event) => event.stopPropagation()}
           >
             <button
               type="button"
               onClick={closeModal}
-              className="absolute right-3 top-3 rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+              className="absolute right-3 top-3 z-[5] rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
               aria-label="Закрыть форму"
             >
               <X className="h-4 w-4" />
             </button>
 
             <div className="border-b border-border p-4 sm:p-6">
-              <p className="text-center text-sm font-medium text-foreground">
-                Тестирование/консультация
-              </p>
+              <h2 className="text-center text-lg font-semibold text-foreground">
+                Тестирование
+              </h2>
             </div>
 
-            <div className="p-4 sm:p-6">
+            <div className="overflow-y-auto flex-1 p-4 sm:p-6" id="form-container">
               {status === "success" ? (
                 <div className="flex flex-col items-center gap-4 py-8 text-center">
                   <div className="rounded-full bg-emerald-500/10 p-4">
                     <CheckCircle2 className="h-10 w-10 text-emerald-600 dark:text-emerald-400" />
                   </div>
-                  <h3 className="text-2xl font-bold">Готово</h3>
-                  <p className="text-muted-foreground">Проверьте почту</p>
+                  <h3 className="text-2xl font-bold">Готово!</h3>
+                  <p className="text-muted-foreground">
+                    Проверьте почту {currentData.email}. Уведомление отправлено в течение 5 минут.
+                  </p>
                   <Button type="button" onClick={resetAndClose}>
                     Закрыть
                   </Button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-                  <div
-                    className="absolute opacity-0 pointer-events-none"
-                    aria-hidden="true"
-                    tabIndex={-1}
-                  >
-                    <Input
-                      name="website"
-                      value={currentData.website}
-                      onChange={(e) =>
-                        activeTab === "pdf"
-                          ? updatePdfField("website", e.target.value)
-                          : updateTrialField("website", e.target.value)
-                      }
-                      tabIndex={-1}
-                      autoComplete="off"
-                    />
-                  </div>
-
+                  {errors.consent && (
+                    <div className="flex items-center gap-2 rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+                      <AlertCircle className="h-4 w-4 shrink-0" />
+                      {errors.consent}
+                    </div>
+                  )}
+                  
+                  {Object.keys(errors).filter(k => k !== "consent").length > 0 && (
+                    <div className="rounded-md bg-destructive/10 p-3 space-y-2">
+                      {Object.entries(errors).filter(([k]) => k !== "consent").map(([field, message]) => (
+                        <div key={field} className="flex items-start gap-2 text-sm text-destructive">
+                          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                          <div>
+                            <p className="font-medium">{field}:</p>
+                            <p>{message}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
                   <div className="space-y-2">
                     <Label htmlFor="email">
                       Email <span className="text-destructive">*</span>
@@ -262,9 +295,7 @@ export function LeadForm() {
                       placeholder="ivan@example.com"
                       value={currentData.email}
                       onChange={(e) =>
-                        activeTab === "pdf"
-                          ? updatePdfField("email", e.target.value)
-                          : updateTrialField("email", e.target.value)
+                        updateTrialField("email", e.target.value)
                       }
                       className={errors.email ? "border-destructive" : ""}
                     />
@@ -280,9 +311,7 @@ export function LeadForm() {
                     <Select
                       value={currentData.specialization}
                       onValueChange={(value) =>
-                        activeTab === "pdf"
-                          ? updatePdfField("specialization", value)
-                          : updateTrialField("specialization", value)
+                        updateTrialField("specialization", value)
                       }
                     >
                       <SelectTrigger
@@ -304,47 +333,41 @@ export function LeadForm() {
                     )}
                   </div>
 
-                  {activeTab === "trial" && (
-                    <>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Телефон</Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          placeholder="+7 (999) 123-45-67"
-                          value={trialData.phone}
-                          onChange={(e) => updateTrialField("phone", e.target.value)}
-                          className={errors.phone ? "border-destructive" : ""}
-                        />
-                        {errors.phone && (
-                          <p className="text-sm text-destructive">{errors.phone}</p>
-                        )}
-                      </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Телефон</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="+7 (999) 123-45-67"
+                      value={trialData.phone}
+                      onChange={(e) => updateTrialField("phone", e.target.value)}
+                      className={errors.phone ? "border-destructive" : ""}
+                    />
+                    {errors.phone && (
+                      <p className="text-sm text-destructive">{errors.phone}</p>
+                    )}
+                  </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="comment">Комментарий</Label>
-                        <Textarea
-                          id="comment"
-                          placeholder="Расскажите о ваших задачах..."
-                          value={trialData.comment}
-                          onChange={(e) => updateTrialField("comment", e.target.value)}
-                          rows={3}
-                        />
-                        {errors.comment && (
-                          <p className="text-sm text-destructive">{errors.comment}</p>
-                        )}
-                      </div>
-                    </>
-                  )}
+                  <div className="space-y-2">
+                    <Label htmlFor="comment">Комментарий</Label>
+                    <Textarea
+                      id="comment"
+                      placeholder="Расскажите о ваших задачах..."
+                      value={trialData.comment}
+                      onChange={(e) => updateTrialField("comment", e.target.value)}
+                      rows={3}
+                    />
+                    {errors.comment && (
+                      <p className="text-sm text-destructive">{errors.comment}</p>
+                    )}
+                  </div>
 
                   <div className="flex items-start gap-3">
                     <Checkbox
                       id="consent"
                       checked={currentData.consent}
                       onCheckedChange={(checked) =>
-                        activeTab === "pdf"
-                          ? updatePdfField("consent", checked === true)
-                          : updateTrialField("consent", checked === true)
+                        updateTrialField("consent", checked === true)
                       }
                       className={errors.consent ? "border-destructive" : ""}
                     />
@@ -367,16 +390,18 @@ export function LeadForm() {
                     </div>
                   )}
 
-                  <Button type="submit" className="w-full h-11" disabled={status === "loading"}>
+                  <Button 
+                    type="submit" 
+                    className="w-full h-11" 
+                    disabled={status === "loading"}
+                  >
                     {status === "loading" ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Отправка...
                       </>
-                    ) : activeTab === "pdf" ? (
-                      "Получить примеры"
                     ) : (
-                      "Запросить консультацию"
+                      "Запросить"
                     )}
                   </Button>
 

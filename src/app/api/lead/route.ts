@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
 
     // Rate limit check
     if (!checkRateLimit(ip)) {
+      console.log("[API /lead] Rate limit exceeded for IP:", ip);
       return NextResponse.json(
         { error: "Слишком много запросов. Попробуйте через час." },
         { status: 429 }
@@ -19,15 +20,19 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    console.log("[API /lead] Received body:", body);
 
     // Honeypot check
     if (typeof body?.website === "string" && body.website.length > 0) {
       // Silently accept but don't save (bot detected)
+      console.log("[API /lead] Honeypot triggered");
       return NextResponse.json({ success: true, id: 0 });
     }
 
     // Server-side validation
     const result = leadSchema.safeParse(body);
+    console.log("[API /lead] Validation result:", result.success, result.error?.issues);
+    
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
       for (const issue of result.error.issues) {
@@ -36,6 +41,7 @@ export async function POST(request: NextRequest) {
           fieldErrors[field] = issue.message;
         }
       }
+      console.log("[API /lead] Validation errors:", fieldErrors);
       return NextResponse.json(
         { error: "Ошибка валидации", fields: fieldErrors },
         { status: 400 }
@@ -58,9 +64,11 @@ export async function POST(request: NextRequest) {
             activity: result.data.specialization,
             email: result.data.email,
             phone: result.data.phone || "",
-            comment: result.data.comment || null,
+            comment: result.data.comment || "",
             source: "landing_trial",
           };
+
+    console.log("[API /lead] Creating lead with payload:", leadPayload);
 
     const lead = await prisma.lead.create({
       data: {
@@ -70,6 +78,8 @@ export async function POST(request: NextRequest) {
         status: "new",
       },
     });
+
+    console.log("[API /lead] Lead created:", lead.id);
 
     try {
       await sendLeadToTelegram(lead);
