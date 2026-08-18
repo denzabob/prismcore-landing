@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import { Moon, Sun, Menu, X, Triangle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { Moon, Sun, Menu, X, Triangle, Home } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const pathname = usePathname();
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const isHomePage = pathname === "/";
   const openLeadModal = (mode: "pdf" | "trial") => {
     window.dispatchEvent(new CustomEvent("openLeadModal", { detail: { mode } }));
   };
@@ -22,14 +31,23 @@ export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="#" className="flex items-center gap-2 font-bold text-lg tracking-tight">
+        <a href="/" className="flex items-center gap-2 font-bold text-lg tracking-tight">
           <Triangle className="h-5 w-5 text-primary fill-primary" />
           Призма
         </a>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
+          {isMounted && !isHomePage && (
+            <a
+              href="/"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+            >
+              <Home className="h-4 w-4" />
+              Главная
+            </a>
+          )}
+          {(!isMounted || isHomePage) && navItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
@@ -80,7 +98,17 @@ export function Header() {
       {menuOpen && (
         <div className="border-t border-border/40 bg-background md:hidden">
           <nav className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-4">
-            {navItems.map((item) => (
+            {isMounted && !isHomePage && (
+              <a
+                href="/"
+                onClick={() => setMenuOpen(false)}
+                className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors flex items-center gap-2"
+              >
+                <Home className="h-4 w-4" />
+                Главная
+              </a>
+            )}
+            {(!isMounted || isHomePage) && navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}

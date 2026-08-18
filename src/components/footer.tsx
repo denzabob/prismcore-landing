@@ -21,6 +21,12 @@ export function Footer() {
             <a href="#cta" className="hover:text-foreground transition-colors">
               Заявка
             </a>
+            <a href="/policy" className="hover:text-foreground transition-colors">
+              Политика конфиденциальности
+            </a>
+            <a href="/support" className="hover:text-foreground transition-colors">
+              Поддержка
+            </a>
           </div>
         </div>
 
