@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { sendYandexMetrikaGoal } from "@/lib/analytics";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
@@ -66,29 +67,40 @@ export function SupportForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    console.log("Form submitted");
-    setServerError("");
+   const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
+     if (e) {
+       e.preventDefault();
+       e.stopPropagation();
+     }
+     setServerError("");
 
-    if (!validate()) {
-      console.log("Validation failed");
-      return;
-    }
+     if (!validate()) {
+       return;
+     }
 
-    console.log("Setting loading status");
-    setStatus("loading");
+     setStatus("loading");
 
-    // Simulate sending delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+     try {
+       const res = await fetch("/api/support", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify(formData),
+       });
 
-    console.log("Setting success status");
-    setStatus("success");
-    setFormData(initialFormData);
-  };
+       if (!res.ok) {
+         setServerError("Не удалось отправить сообщение. Попробуйте позже или свяжитесь с нами в Telegram.");
+         setStatus("error");
+         return;
+       }
+
+       sendYandexMetrikaGoal('support_submit_success');
+       setStatus("success");
+       setFormData(initialFormData);
+      } catch {
+        setServerError("Не удалось отправить сообщение. Попробуйте позже или свяжитесь с нами в Telegram.");
+        setStatus("error");
+      }
+   };
 
   const handleReset = () => {
     setFormData(initialFormData);
@@ -100,19 +112,19 @@ export function SupportForm() {
   return (
     <Card>
       <CardContent className="p-6 sm:p-8">
-        {status === "success" ? (
-          <div className="flex flex-col items-center gap-4 py-8 text-center">
-            <div className="rounded-full bg-emerald-500/10 p-4">
-              <CheckCircle2 className="h-10 w-10 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <h3 className="text-2xl font-bold">Сообщение отправлено</h3>
-            <p className="text-muted-foreground">
-              Мы ответим вам на указанный email в ближайшее время.
-            </p>
-            <Button type="button" onClick={handleReset}>
-              Отправить ещё
-            </Button>
-          </div>
+         {status === "success" ? (
+           <div className="flex flex-col items-center gap-4 py-8 text-center">
+             <div className="rounded-full bg-emerald-500/10 p-4">
+               <CheckCircle2 className="h-10 w-10 text-emerald-600 dark:text-emerald-400" />
+             </div>
+             <h3 className="text-2xl font-bold">Сообщение отправлено</h3>
+             <p className="text-muted-foreground">
+               Мы свяжемся с вами в ближайшее время.
+             </p>
+             <Button type="button" onClick={handleReset}>
+               Отправить ещё
+             </Button>
+           </div>
         ) : (
           <div className="space-y-5">
             <div className="space-y-2">

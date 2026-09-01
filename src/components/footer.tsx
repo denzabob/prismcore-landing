@@ -1,49 +1,51 @@
-import { Triangle } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+"use client";
+
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { BrandMark } from "@/components/brand-mark";
+import { handleYandexMetrikaClick } from "@/lib/analytics";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/40">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2 font-semibold">
-            <Triangle className="h-4 w-4 text-primary fill-primary" />
-            Призма
-          </div>
-
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#audience" className="hover:text-foreground transition-colors">
-              Кому подходит
-            </a>
-            <a href="#evidence" className="hover:text-foreground transition-colors">
-              Доказательная база
-            </a>
-            <a href="#cta" className="hover:text-foreground transition-colors">
-              Заявка
-            </a>
-            <a href="/policy" className="hover:text-foreground transition-colors">
-              Политика конфиденциальности
-            </a>
-            <a href="/support" className="hover:text-foreground transition-colors">
-              Поддержка
-            </a>
-          </div>
+    <footer className="pc-footer">
+      <div className="pc-footer-grid">
+        <div className="pc-footer-brand">
+          <Link href="/" className="pc-logo" aria-label="Призма — главная">
+            <BrandMark />
+            <span>ПРИЗМА</span>
+          </Link>
+          <p>Профессиональная платформа для работы эксперта.</p>
+          <a
+            className="pc-footer-app"
+            href="https://app.prismcore.ru"
+            onClick={handleYandexMetrikaClick('app_open')}
+          >
+            Войти в приложение <ArrowUpRight aria-hidden="true" />
+          </a>
         </div>
 
-        <Separator className="my-8" />
+        <nav aria-label="Продукт">
+          <b>Продукт</b>
+          <Link href="/#capabilities">Возможности</Link>
+          <Link href="/#estimate">Экспертная смета</Link>
+          <Link href="/#indices">Индексы цен</Link>
+        </nav>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Призма. Все права защищены.</p>
-          <p>
-            Контакты:{" "}
-            <a
-              href="mailto:info@prismcore.ru"
-              className="underline underline-offset-4 hover:text-foreground transition-colors"
-            >
-              info@prismcore.ru
-            </a>
-          </p>
-        </div>
+         <nav aria-label="Материалы">
+           <b>Материалы</b>
+           <a href="/support">Поддержка</a>
+           <a href="https://t.me/denzabob" target="_blank" rel="noopener noreferrer nofollow" onClick={handleYandexMetrikaClick('telegram_click')}>Telegram</a>
+         </nav>
+
+        <nav aria-label="Правовая информация">
+          <b>Правовая информация</b>
+          <Link href="/policy">Политика конфиденциальности</Link>
+        </nav>
+      </div>
+
+      <div className="pc-footer-bottom">
+        <p>© {new Date().getFullYear()} PrismCore</p>
+        <p>Профессиональные инструменты в единой рабочей среде.</p>
       </div>
     </footer>
   );

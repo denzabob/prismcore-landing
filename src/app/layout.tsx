@@ -1,24 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Manrope, Source_Serif_4 } from "next/font/google";
 import Script from "next/script";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["cyrillic", "latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const sourceSerif = Source_Serif_4({
+  variable: "--font-source-serif",
+  subsets: ["cyrillic", "latin"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
-  title: "Призма — сметный расчёт и доказательная база для эксперта",
+  title: "Призма — профессиональная платформа для работы эксперта",
   description:
-    "Структурируйте расчёты, формируйте прозрачные сметы и создавайте документы, пригодные для приложения к экспертному заключению. Призма — сметное приложение для экспертов, юристов и оценщиков.",
+    "Инструменты для расчёта стоимости, работы с данными и подготовки экспертных исследований — в единой профессиональной среде.",
   keywords: [
     "смета",
     "сметный расчёт",
@@ -29,9 +30,9 @@ export const metadata: Metadata = {
     "сметное приложение",
   ],
   openGraph: {
-    title: "Призма — сметный расчёт и доказательная база для эксперта",
+    title: "Призма — профессиональная платформа для работы эксперта",
     description:
-      "Структурируйте расчёты, формируйте прозрачные сметы и создавайте документы для экспертных заключений.",
+      "Инструменты для расчётов, анализа данных и подготовки экспертных исследований.",
     type: "website",
     locale: "ru_RU",
     siteName: "Призма",
@@ -71,7 +72,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
+        className={`${manrope.variable} ${sourceSerif.variable} antialiased font-sans`}
       >
         <noscript>
           <div>

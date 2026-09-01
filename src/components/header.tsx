@@ -1,136 +1,100 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import { Moon, Sun, Menu, X, Triangle, Home } from "lucide-react";
-import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import Link from "next/link";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import { BrandMark } from "@/components/brand-mark";
+import { handleYandexMetrikaClick } from "@/lib/analytics";
+
+const navItems = [
+  { label: "Возможности", href: "/#capabilities" },
+  { label: "Смета", href: "/#estimate" },
+  { label: "Индексы", href: "/#indices" },
+];
 
 export function Header() {
-  const { theme, setTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const pathname = usePathname();
-  
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const isHomePage = pathname === "/";
-  const openLeadModal = (mode: "pdf" | "trial") => {
-    window.dispatchEvent(new CustomEvent("openLeadModal", { detail: { mode } }));
-  };
-
-  const navItems = [
-    { label: "Кому подходит", href: "#audience" },
-    { label: "Сравнение", href: "#comparison" },
-    { label: "Доказательная база", href: "#evidence" },
-    { label: "Результат", href: "#results" },
-  ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="/" className="flex items-center gap-2 font-bold text-lg tracking-tight">
-          <Triangle className="h-5 w-5 text-primary fill-primary" />
-          Призма
-        </a>
+    <header className="pc-header">
+      <div className="pc-header-inner">
+        <Link href="/" className="pc-logo" aria-label="Призма — главная">
+          <BrandMark />
+          <span>ПРИЗМА</span>
+        </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6">
-          {isMounted && !isHomePage && (
-            <a
-              href="/"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
-            >
-              <Home className="h-4 w-4" />
-              Главная
-            </a>
-          )}
-          {(!isMounted || isHomePage) && navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {item.label}
-            </a>
-          ))}
-          <Button size="sm" type="button" onClick={() => openLeadModal("trial")}>
-            Тестировать Призму
-          </Button>
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="rounded-md p-2 hover:bg-accent transition-colors"
-            aria-label="Переключить тему"
-          >
-            {theme === "dark" ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </button>
-        </nav>
-
-        {/* Mobile menu button */}
-        <div className="flex items-center gap-2 md:hidden">
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="rounded-md p-2 hover:bg-accent transition-colors"
-            aria-label="Переключить тему"
-          >
-            {theme === "dark" ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </button>
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="rounded-md p-2 hover:bg-accent transition-colors"
-          >
-            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="border-t border-border/40 bg-background md:hidden">
-          <nav className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-4">
-            {isMounted && !isHomePage && (
-              <a
-                href="/"
-                onClick={() => setMenuOpen(false)}
-                className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors flex items-center gap-2"
-              >
-                <Home className="h-4 w-4" />
-                Главная
-              </a>
-            )}
-            {(!isMounted || isHomePage) && navItems.map((item) => (
+          <nav className="pc-desktop-nav" aria-label="Основная навигация">
+            {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
               >
                 {item.label}
               </a>
             ))}
-            <Button
-              size="sm"
-              className="w-full mt-2"
-              type="button"
-              onClick={() => {
-                setMenuOpen(false);
-                openLeadModal("trial");
-              }}
-            >
-              Тестировать Призму
-            </Button>
           </nav>
-        </div>
+
+          <div className="pc-header-actions">
+            <a
+              className="pc-login"
+              href="https://app.prismcore.ru"
+              onClick={handleYandexMetrikaClick('login_click')}
+            >
+              Войти
+            </a>
+            <a
+              className="pc-button pc-button--primary pc-header-cta"
+              href="https://app.prismcore.ru"
+              onClick={handleYandexMetrikaClick('app_open')}
+            >
+              Начать работу <ArrowUpRight aria-hidden="true" />
+            </a>
+          </div>
+
+        <button
+          type="button"
+          className="pc-menu-button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-navigation"
+          aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
+        >
+          {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+        </button>
+      </div>
+
+      {menuOpen && (
+          <nav
+            className="pc-mobile-nav"
+            id="mobile-navigation"
+            aria-label="Мобильная навигация"
+          >
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+              >
+                {item.label}
+              </a>
+            ))}
+            <div>
+              <a
+                className="pc-button pc-button--secondary"
+                href="https://app.prismcore.ru"
+                onClick={handleYandexMetrikaClick('login_click', () => setMenuOpen(false))}
+              >
+                Войти
+              </a>
+              <a
+                className="pc-button pc-button--primary"
+                href="https://app.prismcore.ru"
+                onClick={handleYandexMetrikaClick('app_open', () => setMenuOpen(false))}
+              >
+                Начать работу <ArrowUpRight aria-hidden="true" />
+              </a>
+            </div>
+        </nav>
       )}
     </header>
   );

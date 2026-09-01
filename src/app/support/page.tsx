@@ -1,6 +1,7 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { SupportForm } from "@/components/support-form";
+import Link from "next/link";
 
 export default function SupportPage() {
   return (
@@ -13,6 +14,17 @@ export default function SupportPage() {
             Опишите вашу проблему или вопрос, и мы свяжемся с вами в ближайшее время.
           </p>
           <SupportForm />
+          <p className="mt-8 text-center text-muted-foreground">
+            Можно написать напрямую в Telegram:{" "}
+            <Link
+              href="https://t.me/denzabob"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="text-primary hover:underline"
+            >
+              https://t.me/denzabob
+            </Link>
+          </p>
         </div>
       </main>
       <Footer />

@@ -20,6 +20,7 @@ import {
   pdfLeadSchema,
   trialLeadSchema,
 } from "@/lib/validators";
+import { sendYandexMetrikaGoal } from "@/lib/analytics";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 type LeadMode = "pdf" | "trial";
@@ -42,7 +43,7 @@ const initialTrialData = {
   website: "",
 };
 
-export function LeadForm() {
+export function LeadForm({ showSection = true }: { showSection?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<LeadMode>("trial");
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -51,35 +52,24 @@ export function LeadForm() {
   const [pdfData, setPdfData] = useState(initialPdfData);
   const [trialData, setTrialData] = useState(initialTrialData);
 
-  useEffect(() => {
-    const onOpenModal = (event: Event) => {
-      const customEvent = event as CustomEvent<{ mode?: LeadMode }>;
-      void customEvent;
-      setActiveTab("trial");
-      setStatus("idle");
-      setErrors({});
-      setServerError("");
-      setIsOpen(true);
-    };
+    useEffect(() => {
+      const onOpenModal = (event: Event) => {
+        const customEvent = event as CustomEvent<{ mode?: LeadMode }>;
+        void customEvent;
+        setActiveTab("trial");
+        setStatus("idle");
+        setErrors({});
+        setServerError("");
+        setIsOpen(true);
+      };
 
-    window.addEventListener("openLeadModal", onOpenModal as EventListener);
-    return () => {
-      window.removeEventListener("openLeadModal", onOpenModal as EventListener);
-    };
-  }, []);
+      window.addEventListener("openLeadModal", onOpenModal as EventListener);
+      return () => {
+        window.removeEventListener("openLeadModal", onOpenModal as EventListener);
+      };
+    }, []);
 
   const currentData = activeTab === "pdf" ? pdfData : trialData;
-
-  const updatePdfField = (field: keyof typeof initialPdfData, value: string | boolean) => {
-    setPdfData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[field];
-        return next;
-      });
-    }
-  };
 
   const updateTrialField = (
     field: keyof typeof initialTrialData,
@@ -108,7 +98,7 @@ export function LeadForm() {
     setServerError("");
 
     const schema = activeTab === "pdf" ? pdfLeadSchema : trialLeadSchema;
-    let data = activeTab === "pdf" ? pdfData : trialData;
+    const data = activeTab === "pdf" ? pdfData : trialData;
     
     // Убедимся что honeypot поле пусто
     if (data.website) {
@@ -161,13 +151,14 @@ export function LeadForm() {
       const dataResponse = await res.json();
       console.log("[FormDebug] Response data:", dataResponse);
 
-      if (!res.ok) {
-        setServerError(dataResponse.error || "Ошибка при отправке. Попробуйте позже.");
-        setStatus("error");
-        return;
-      }
+       if (!res.ok) {
+         setServerError(dataResponse.error || "Ошибка при отправке. Попробуйте позже.");
+         setStatus("error");
+         return;
+       }
 
-      setStatus("success");
+       sendYandexMetrikaGoal('lead_submit_success');
+       setStatus("success");
     } catch (error) {
       console.error("[FormDebug] Error:", error);
       setServerError("Ошибка сети. Проверьте подключение и попробуйте ещё раз.");
@@ -182,7 +173,9 @@ export function LeadForm() {
   };
 
   return (
-    <section id="cta" className="py-16 sm:py-24">
+    <>
+      {showSection && (
+        <section id="cta" className="py-16 sm:py-24">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="mb-5 rounded-2xl border border-border/60 bg-muted/30 p-5 sm:mb-6 sm:p-6">
           <h3 className="text-xl sm:text-2xl font-semibold tracking-tight mb-4">
@@ -208,29 +201,31 @@ export function LeadForm() {
             <p className="break-words text-muted-foreground text-base sm:text-lg mb-8">
               Откройте форму, чтобы запросить тестирование, консультацию или сравнение текущего расчёта.
             </p>
-            <div className="flex justify-center">
-              <Button
-                type="button"
-                className="h-auto w-full max-w-sm whitespace-normal px-4 py-3 text-center"
-                onClick={() => {
-                  setActiveTab("trial");
-                  setIsOpen(true);
-                }}
-              >
-                Тестировать Призму
-              </Button>
-            </div>
+             <div className="flex justify-center">
+                <Button
+                  type="button"
+                  className="h-auto w-full max-w-sm whitespace-normal px-4 py-3 text-center"
+                  onClick={() => {
+                    setActiveTab("trial");
+                    setIsOpen(true);
+                  }}
+                >
+                  Тестировать Призму
+                </Button>
+             </div>
           </CardContent>
         </Card>
       </div>
+        </section>
+      )}
 
       {isOpen && (
         <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4"
+          className="pc-lead-backdrop fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4"
           onClick={closeModal}
         >
           <div
-            className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-2xl border border-border bg-background flex flex-col"
+            className="pc-lead-dialog relative w-full max-w-xl max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-2xl border border-border bg-background flex flex-col"
             onClick={(event) => event.stopPropagation()}
           >
             <button
@@ -415,6 +410,6 @@ export function LeadForm() {
           </div>
         </div>
       )}
-    </section>
+    </>
   );
 }
