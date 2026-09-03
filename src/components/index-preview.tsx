@@ -77,12 +77,6 @@ export function IndexPreview() {
                 Коэффициент вырос с 1,00 в феврале 2021 года до 1,2737 в мае
                 2026 года.
               </desc>
-              <defs>
-                <linearGradient id="pc-index-area" x1="0" y1="0" x2="0" y2="1">
-                  <stop stopColor="#097c77" stopOpacity="0.2" />
-                  <stop offset="1" stopColor="#097c77" stopOpacity="0" />
-                </linearGradient>
-              </defs>
               <path
                 className="pc-chart-area"
                 d="M0 225 L45 218 L90 202 L135 208 L180 184 L225 171 L270 178 L315 146 L360 153 L405 126 L450 115 L495 96 L540 103 L585 72 L630 61 L675 43 L720 31 V250 H0 Z"

@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { EstimatePreview } from "@/components/estimate-preview";
 import { IndexPreview } from "@/components/index-preview";
 import { handleYandexMetrikaClick } from "@/lib/analytics";
 
@@ -26,6 +27,7 @@ interface Module {
   items: string[];
   href: string;
   featured: boolean;
+  preview: "estimate" | "indices";
 }
 
 const modules: Module[] = [
@@ -37,6 +39,7 @@ const modules: Module[] = [
     items: ["Расчёты", "Источники", "Проверяемость", "Результат"],
     href: "#estimate",
     featured: true,
+    preview: "estimate",
   },
   {
     number: "02",
@@ -46,6 +49,7 @@ const modules: Module[] = [
     items: ["Индексы цен производителей", "ИПЦ", "Поиск и графики", "Изменение стоимости"],
     href: "https://indices.prismcore.ru/",
     featured: false,
+    preview: "indices",
   },
 ];
 
@@ -144,6 +148,9 @@ export function EcosystemSection() {
              <b>{module.number}</b>
              <h3>{module.title}</h3>
              <p>{module.description}</p>
+             <div className={`pc-module-preview pc-module-preview--${module.preview}`} aria-hidden="true">
+               {module.preview === "estimate" ? <EstimatePreview compact /> : <IndexPreview />}
+             </div>
              <ul>
                {module.items.map((item) => (
                  <li key={item}>{item}</li>
