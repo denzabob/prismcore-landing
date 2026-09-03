@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { Footer } from "@/components/footer";
+import { PublicToolsTeaser } from "@/components/public-tools-teaser";
 import {
   ExpertEstimate,
   MarketSources,
@@ -76,6 +77,7 @@ export default function Home() {
         />
         <Hero />
         <EcosystemSection />
+        <PublicToolsTeaser />
         <PlatformIntro />
         <ExpertEstimate />
         <MarketSources />

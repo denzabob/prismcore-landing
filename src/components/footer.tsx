@@ -38,6 +38,12 @@ export function Footer() {
           <a href="https://t.me/denzabob" target="_blank" rel="noopener noreferrer nofollow" onClick={handleYandexMetrikaClick('telegram_click')}>Telegram</a>
         </nav>
 
+        <nav aria-label="Инструменты">
+          <b>Инструменты</b>
+          <Link href="/tools/price-change">Пересчёт стоимости</Link>
+          <Link href="/tools/okpd2">Поиск ОКПД2</Link>
+        </nav>
+
         <nav aria-label="Правовая информация">
           <b>Правовая информация</b>
           <Link href="/policy">Политика конфиденциальности</Link>

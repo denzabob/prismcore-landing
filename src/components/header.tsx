@@ -8,6 +8,7 @@ import { handleYandexMetrikaClick } from "@/lib/analytics";
 
 const navItems = [
   { label: "Продукты", href: "/#products" },
+  { label: "Инструменты", href: "/tools" },
   { label: "Возможности", href: "/#capabilities" },
   { label: "Как работает", href: "/#workflow" },
 ];
@@ -25,12 +26,12 @@ export function Header() {
 
           <nav className="pc-desktop-nav" aria-label="Основная навигация">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -63,13 +64,13 @@ export function Header() {
             aria-label="Мобильная навигация"
           >
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
             <div>
               <a
