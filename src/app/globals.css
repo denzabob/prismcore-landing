@@ -1655,7 +1655,7 @@ a {
 .pc-module-grid {
   margin-top: 2.6rem;
   display: grid;
-  grid-template-columns: 1.15fr 1fr 0.8fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.9rem;
 }
 
@@ -1756,6 +1756,12 @@ a {
 .pc-module-card > a svg {
   width: 0.85rem;
   height: 0.85rem;
+}
+
+.pc-ecosystem-note {
+  margin: 1rem 0 0;
+  color: var(--pc-muted);
+  font-size: 0.7rem;
 }
 
 .pc-module-card--future {
@@ -1911,6 +1917,37 @@ a {
 .pc-lead-dialog textarea,
 .pc-lead-dialog button {
   border-radius: 3px;
+}
+
+.pc-not-found {
+  min-height: 100svh;
+  padding: 2rem var(--pc-gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background: var(--pc-paper);
+}
+
+.pc-not-found .pc-logo {
+  position: absolute;
+  top: 2rem;
+  left: var(--pc-gutter);
+}
+
+.pc-not-found h1 {
+  max-width: 38rem;
+  margin: 0 0 1rem;
+  font-size: clamp(2.8rem, 7vw, 5rem);
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.pc-not-found > p:not(.pc-overline) {
+  max-width: 28rem;
+  margin: 0 0 1.75rem;
+  color: var(--pc-muted);
+  line-height: 1.65;
 }
 
 @media (max-width: 1120px) {

@@ -7,8 +7,8 @@ import { handleYandexMetrikaClick } from "@/lib/analytics";
 const workflowSteps = [
   ["01", "Исходные данные", "Параметры объекта и сведения для расчёта"],
   ["02", "Расчёт", "Материалы, работы и стоимостные показатели"],
-  ["03", "Проверяемые источники", "Данные, на которых основан результат"],
-  ["04", "Профессиональный результат", "Структурированный расчёт для экспертной работы"],
+  ["03", "Источники", "Данные, на которых основан результат"],
+  ["04", "Проверяемый результат", "Структурированный результат для экспертной работы"],
 ];
 
 const principles = [
@@ -32,19 +32,19 @@ const modules: Module[] = [
   {
     number: "01",
     status: "ДОСТУПНО",
-    title: "Экспертная смета",
-    description: "Расчёт стоимости устранения недостатков.",
-    items: ["Материалы и работы", "Рыночные цены", "Источники", "Итоговый расчёт"],
+    title: "ПРИЗМА",
+    description: "Рабочая среда для экспертных расчётов и подготовки результата.",
+    items: ["Расчёты", "Источники", "Проверяемость", "Результат"],
     href: "#estimate",
     featured: true,
   },
   {
     number: "02",
-    status: "MVP · ДОСТУПНО",
-    title: "Индексы цен",
-    description: "Работа с изменением стоимости между периодами.",
-    items: ["Данные Росстата", "Периоды", "Коэффициент", "Пересчёт стоимости"],
-    href: "#indices",
+    status: "ПУБЛИЧНЫЙ СЕРВИС",
+    title: "ПРИЗМА Индексы",
+    description: "Официальные данные Росстата для анализа и пересчёта стоимости.",
+    items: ["Индексы цен производителей", "ИПЦ", "Поиск и графики", "Изменение стоимости"],
+    href: "https://indices.prismcore.ru/",
     featured: false,
   },
 ];
@@ -54,12 +54,12 @@ export function IndicesSection() {
     <section className="pc-indices" id="indices">
       <div className="pc-indices-heading">
         <div>
-          <p className="pc-overline">02 / ПРИЗМА — ЭТО БОЛЬШЕ, ЧЕМ СМЕТА</p>
-          <h2>Индексы цен</h2>
+          <p className="pc-overline">ПРИЗМА ИНДЕКСЫ</p>
+          <h2>Официальные данные для пересчёта стоимости</h2>
         </div>
         <p>
-          Инструмент для анализа изменения стоимости и пересчёта цен между
-          периодами с использованием официальных статистических данных.
+          Индексы цен производителей, ИПЦ, поиск, графики и расчёт изменения
+          стоимости по официальным данным Росстата.
         </p>
         <a
           className="pc-button pc-button--secondary"
@@ -68,7 +68,7 @@ export function IndicesSection() {
           rel="noopener noreferrer"
           onClick={handleYandexMetrikaClick('indices_public_open')}
         >
-          Открыть публичные индексы <ArrowUpRight aria-hidden="true" />
+          Открыть Индексы <ArrowUpRight aria-hidden="true" />
         </a>
       </div>
       <IndexPreview />
@@ -124,15 +124,14 @@ export function TrustSection() {
 
 export function EcosystemSection() {
   return (
-    <section className="pc-ecosystem" aria-labelledby="ecosystem-title">
-      <p className="pc-overline">ПЛАТФОРМА PRISMCORE</p>
+    <section className="pc-ecosystem" id="products" aria-labelledby="ecosystem-title">
+      <p className="pc-overline">ПРОДУКТЫ ПРИЗМЫ</p>
       <h2 id="ecosystem-title">
-        Платформа, которая развивается вместе с экспертной практикой
+        Два продукта для разных этапов экспертной работы
       </h2>
       <p className="pc-ecosystem-intro">
-        Призма объединяет специализированные инструменты в единой рабочей
-        среде. Архитектура платформы рассчитана на появление новых
-        профессиональных модулей.
+        Начните с рабочего пространства для расчётов или откройте публичный
+        сервис индексов, когда нужно проверить динамику стоимости.
       </p>
 
        <div className="pc-module-grid">
@@ -150,24 +149,19 @@ export function EcosystemSection() {
                  <li key={item}>{item}</li>
                ))}
              </ul>
-              <a href={module.href}>
-                О модуле <ArrowUpRight aria-hidden="true" />
+              <a
+                href={module.href}
+                {...(module.href.startsWith("http")
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+              >
+                {module.number === "01" ? "Посмотреть возможности" : "Открыть Индексы"} <ArrowUpRight aria-hidden="true" />
               </a>
            </article>
          ))}
 
-        <article className="pc-module-card pc-module-card--future">
-          <span>В РАЗРАБОТКЕ</span>
-          <b>03</b>
-          <h3>Новые инструменты</h3>
-          <p>Модульная архитектура готова к дальнейшему развитию платформы.</p>
-          <div className="pc-future-lines" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-          </div>
-        </article>
       </div>
+      <p className="pc-ecosystem-note">Развиваем бесплатные инструменты для профессиональных расчётов.</p>
     </section>
   );
 }
@@ -193,8 +187,8 @@ export function FinalCta() {
         <br />в одной рабочей среде
       </h2>
       <p>
-        Используйте Призму для расчётов и работы с данными в экспертной
-        практике.
+        Начните работу с расчётами или откройте публичные индексы для анализа
+        изменения стоимости.
       </p>
        <div>
          <a 
@@ -204,13 +198,9 @@ export function FinalCta() {
          >
            Начать работу <ArrowUpRight aria-hidden="true" />
          </a>
-         <a 
-           className="pc-button pc-button--secondary" 
-           href="https://app.prismcore.ru"
-           onClick={handleYandexMetrikaClick('login_click')}
-         >
-           Войти
-         </a>
+          <a className="pc-button pc-button--secondary" href="#products">
+            Посмотреть продукты <ArrowUpRight aria-hidden="true" />
+          </a>
        </div>
     </section>
   );

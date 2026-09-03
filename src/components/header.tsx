@@ -7,9 +7,9 @@ import { BrandMark } from "@/components/brand-mark";
 import { handleYandexMetrikaClick } from "@/lib/analytics";
 
 const navItems = [
+  { label: "Продукты", href: "/#products" },
   { label: "Возможности", href: "/#capabilities" },
-  { label: "Смета", href: "/#estimate" },
-  { label: "Индексы", href: "/#indices" },
+  { label: "Как работает", href: "/#workflow" },
 ];
 
 export function Header() {
@@ -42,13 +42,6 @@ export function Header() {
             >
               Войти
             </a>
-            <a
-              className="pc-button pc-button--primary pc-header-cta"
-              href="https://app.prismcore.ru"
-              onClick={handleYandexMetrikaClick('app_open')}
-            >
-              Начать работу <ArrowUpRight aria-hidden="true" />
-            </a>
           </div>
 
         <button
@@ -80,18 +73,11 @@ export function Header() {
             ))}
             <div>
               <a
-                className="pc-button pc-button--secondary"
+                className="pc-button pc-button--primary"
                 href="https://app.prismcore.ru"
                 onClick={handleYandexMetrikaClick('login_click', () => setMenuOpen(false))}
               >
-                Войти
-              </a>
-              <a
-                className="pc-button pc-button--primary"
-                href="https://app.prismcore.ru"
-                onClick={handleYandexMetrikaClick('app_open', () => setMenuOpen(false))}
-              >
-                Начать работу <ArrowUpRight aria-hidden="true" />
+                Войти <ArrowUpRight aria-hidden="true" />
               </a>
             </div>
         </nav>

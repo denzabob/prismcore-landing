@@ -2,6 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hasValidAdminSession } from "@/lib/admin-auth";
 
+type ExportLead = {
+  id: number;
+  createdAt: Date;
+  name: string;
+  activity: string;
+  email: string;
+  phone: string;
+  comment: string | null;
+  source: string;
+  status: string;
+  ip: string | null;
+  userAgent: string | null;
+};
+
 export async function GET(request: NextRequest) {
   if (!hasValidAdminSession(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -35,7 +49,7 @@ export async function GET(request: NextRequest) {
     return str;
   };
 
-  const rows = leads.map((lead) => [
+  const rows: Array<Array<string | number>> = leads.map((lead: ExportLead) => [
     lead.id,
     new Date(lead.createdAt).toISOString(),
     escapeCSV(lead.name),

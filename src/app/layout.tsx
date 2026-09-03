@@ -17,6 +17,7 @@ const sourceSerif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://prismcore.ru"),
   title: "Призма — профессиональная платформа для работы эксперта",
   description:
     "Инструменты для расчёта стоимости, работы с данными и подготовки экспертных исследований — в единой профессиональной среде.",
@@ -29,15 +30,10 @@ export const metadata: Metadata = {
     "призма",
     "сметное приложение",
   ],
-  openGraph: {
-    title: "Призма — профессиональная платформа для работы эксперта",
-    description:
-      "Инструменты для расчётов, анализа данных и подготовки экспертных исследований.",
-    type: "website",
-    locale: "ru_RU",
-    siteName: "Призма",
+  robots: {
+    index: true,
+    follow: true,
   },
-  robots: "index, follow",
 };
 
 export default function RootLayout({

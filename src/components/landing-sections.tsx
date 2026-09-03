@@ -39,12 +39,12 @@ const sources = [
 export function PlatformIntro() {
   return (
     <section className="pc-platform" id="capabilities">
-      <p className="pc-overline">ЕДИНАЯ СРЕДА</p>
+      <p className="pc-overline">ПОДХОД ПРИЗМЫ</p>
       <div>
-        <h2>Один сервис — разные задачи экспертной работы.</h2>
+        <h2>Расчёты, источники и результат — в одной рабочей среде.</h2>
         <p>
-          Призма объединяет специализированные инструменты в единой
-          профессиональной среде.
+          Призма помогает эксперту сохранить основание результата и пройти
+          путь от исходных данных до проверяемого расчёта.
         </p>
       </div>
     </section>
@@ -56,13 +56,12 @@ export function ExpertEstimate() {
     <section className="pc-estimate-feature" id="estimate">
       <div className="pc-section-heading">
         <div>
-          <p className="pc-overline">01 / ЭКСПЕРТНАЯ СМЕТА</p>
-          <h2>Расчёт стоимости, который можно проверить</h2>
+          <p className="pc-overline">ПРИЗМА / ЭКСПЕРТНАЯ СМЕТА</p>
+          <h2>Рабочая среда для расчёта стоимости и профессионального результата</h2>
         </div>
         <p>
-          Инструмент для расчёта стоимости устранения недостатков с
-          использованием рыночных цен, стоимости материалов и работ и
-          раскрытием исходных данных расчёта.
+          Материалы, работы и рыночные цены собираются в структурированный
+          расчёт с раскрытием исходных данных.
         </p>
       </div>
 
@@ -85,8 +84,8 @@ export function MarketSources() {
   return (
     <section className="pc-sources" id="sources">
       <div className="pc-source-copy">
-        <p className="pc-overline">ДАННЫЕ РАСЧЁТА</p>
-        <h2>Не просто итоговая цифра</h2>
+        <p className="pc-overline">ОСНОВАНИЕ РЕЗУЛЬТАТА</p>
+        <h2>У результата есть источник</h2>
         <p>
           Сохраняйте структуру расчёта и данные, на которых он основан.
         </p>

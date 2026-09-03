@@ -14,28 +14,29 @@ export function Footer() {
             <BrandMark />
             <span>ПРИЗМА</span>
           </Link>
-          <p>Профессиональная платформа для работы эксперта.</p>
+          <p>Профессиональные инструменты для расчётов, источников и проверяемого результата.</p>
           <a
             className="pc-footer-app"
             href="https://app.prismcore.ru"
             onClick={handleYandexMetrikaClick('app_open')}
           >
-            Войти в приложение <ArrowUpRight aria-hidden="true" />
+            Начать работу <ArrowUpRight aria-hidden="true" />
           </a>
         </div>
 
-        <nav aria-label="Продукт">
-          <b>Продукт</b>
+        <nav aria-label="Продукты">
+          <b>Продукты</b>
+          <Link href="/#products">ПРИЗМА</Link>
+          <a href="https://indices.prismcore.ru/" target="_blank" rel="noopener noreferrer">ПРИЗМА Индексы</a>
           <Link href="/#capabilities">Возможности</Link>
-          <Link href="/#estimate">Экспертная смета</Link>
-          <Link href="/#indices">Индексы цен</Link>
         </nav>
 
-         <nav aria-label="Материалы">
-           <b>Материалы</b>
-           <a href="/support">Поддержка</a>
-           <a href="https://t.me/denzabob" target="_blank" rel="noopener noreferrer nofollow" onClick={handleYandexMetrikaClick('telegram_click')}>Telegram</a>
-         </nav>
+        <nav aria-label="Сервис">
+          <b>Сервис</b>
+          <Link href="/#workflow">Как работает</Link>
+          <Link href="/support">Поддержка</Link>
+          <a href="https://t.me/denzabob" target="_blank" rel="noopener noreferrer nofollow" onClick={handleYandexMetrikaClick('telegram_click')}>Telegram</a>
+        </nav>
 
         <nav aria-label="Правовая информация">
           <b>Правовая информация</b>

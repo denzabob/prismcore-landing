@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+
+export const metadata: Metadata = {
+  title: "Политика конфиденциальности — Призма",
+  description: "Политика конфиденциальности расширения «Призма — Автосбор материалов».",
+  alternates: { canonical: "/policy" },
+};
 
 export default function PolicyPage() {
   return (

@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { SupportForm } from "@/components/support-form";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Поддержка — Призма",
+  description: "Свяжитесь с командой ПРИЗМЫ по вопросам работы сервиса.",
+  alternates: { canonical: "/support" },
+};
 
 export default function SupportPage() {
   return (

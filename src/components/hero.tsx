@@ -12,12 +12,12 @@ export function Hero() {
           PRISMCORE <span>·</span> PROFESSIONAL EXPERT SOFTWARE
         </p>
         <h1>
-          Профессиональная платформа <em>для</em>{" "}
-          <span>работы</span> эксперта
+          Профессиональные инструменты <em>для</em>{" "}
+          <span>экспертной работы</span>
         </h1>
         <p className="pc-hero-intro">
-          Инструменты для расчёта стоимости, работы с данными и подготовки
-          экспертных исследований — в единой профессиональной среде.
+          Проводите расчёты, сохраняйте источники и получайте профессиональный
+          результат, который можно проверить и воспроизвести.
         </p>
           <div className="pc-hero-actions">
             <a
@@ -27,12 +27,12 @@ export function Hero() {
             >
               Начать работу <ArrowUpRight aria-hidden="true" />
             </a>
-            <a className="pc-button pc-button--secondary" href="#capabilities">
-              Посмотреть возможности <ArrowRight aria-hidden="true" />
+            <a className="pc-button pc-button--secondary" href="#products">
+              Сервисы ПРИЗМЫ <ArrowRight aria-hidden="true" />
             </a>
           </div>
         <p className="pc-mvp-note">
-          <span /> Сервис находится на стадии MVP и активно развивается
+          <span /> Два продукта уже доступны для профессиональной работы
         </p>
       </div>
 
